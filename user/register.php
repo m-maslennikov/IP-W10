@@ -34,7 +34,7 @@
           <button type="submit" class="btn btn-primary btn-block" name="register_account">Register</button>
         </form>
         <div class="text-center">
-          <a class="d-block small mt-3" href="login.php">Login Page</a>
+          <a class="d-block small mt-3" href="login.php">Login</a>
           <a class="d-block small" href="forgot-password.php">Forgot Password?</a>
         </div>
       </div>

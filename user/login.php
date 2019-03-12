@@ -1,6 +1,6 @@
 <?php include "includes/_user-head-start.php"; ?>
   <title>Login</title>
-<?php include "includes/_user-head-end.php"; ?>>
+<?php include "includes/_user-head-end.php"; ?>
 
 <?php login(); ?>
 

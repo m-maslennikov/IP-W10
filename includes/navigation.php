@@ -6,10 +6,8 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav mx-auto">
-        <li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
-        <li class="nav-item"><a class="nav-link" href="cars.php">Vehicles</a></li>
-        <li class="nav-item"><a class="nav-link" href="user/login.php">Login</a></li>
-        <li class="nav-item"><a class="nav-link" href="user/register.php">Register</a></li>
+        <li class="nav-item"><a class="nav-link" href="cars.php">Vehicles</a></li>  
+        <li class="nav-item"><a class="nav-link" href="contact.php">Contact us</a></li>
       </ul>
       <ul class="nav navbar-nav">
       <?php  if (isset($_SESSION['account_email'])) : ?>
