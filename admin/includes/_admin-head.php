@@ -1,4 +1,12 @@
 <?php ob_start(); ?>
+<?php session_start(); ?>
+
+<?php 
+if (!isset($_SESSION['account_type'])) {
+    header("Location: ../user/login.php");
+}
+?>
+
 <?php include "../includes/db-connection.php"; ?>
 <?php include "functions.php"; ?>
 <!DOCTYPE html>
@@ -11,6 +19,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+    <!-- Google Charts-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <!-- Custom fonts for this template-->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
@@ -18,4 +28,9 @@
     <!--<link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">-->
 
     <!-- Custom styles for this template-->
-    <link href="css/sb-admin.css" rel="stylesheet">
+    <link href="../css/sb-admin.css" rel="stylesheet">
+    <title>Administration</title>
+
+</head>
+
+<body>

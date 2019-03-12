@@ -1,9 +1,7 @@
-<?php include "includes/admin-head-start.php"; ?>
-    <title>Administration</title>
-<?php include "includes/admin-head-end.php"; ?>
-<?php include "includes/admin-navbar.php" ?>
+<?php include "includes/_admin-head.php"; ?>
+<?php include "includes/_admin-navbar.php" ?>
     <div id="wrapper">
-        <?php include "includes/admin-sidebar.php" ?>
+        <?php include "includes/_admin-sidebar.php" ?>
         <div id="content-wrapper">
             <div class="container-fluid">
                 <div class="row">
@@ -23,8 +21,8 @@
                     </div><!-- /.col-lg-12 -->
                 </div><!-- /.row -->
             </div><!-- /.container-fluid -->
-            <?php include "includes/admin-footer.php" ?>
+            <?php include "includes/_admin-footer.php" ?>
         </div><!-- /.content-wrapper -->
     </div><!-- /#wrapper -->
-    <?php include "includes/admin-logout-modal.php" ?>
-<?php include "includes/admin-body-end.php" ?>
+    <?php include "includes/_admin-logout-modal.php" ?>
+<?php include "includes/_admin-body-end.php" ?>

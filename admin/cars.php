@@ -1,9 +1,7 @@
-<?php include "includes/admin-head-start.php"; ?>
-    <title>Posts - Administration</title>
-<?php include "includes/admin-head-end.php"; ?>
-<?php include "includes/admin-navbar.php" ?>
+<?php include "includes/_admin-head.php"; ?>
+<?php include "includes/_admin-navbar.php"; ?>
     <div id="wrapper">
-        <?php include "includes/admin-sidebar.php" ?>
+        <?php include "includes/_admin-sidebar.php" ?>
         <div id="content-wrapper">
             <div class="container-fluid">
                 <div class="row">
@@ -11,42 +9,42 @@
                         <!-- Breadcrumbs-->
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item active">
-                                <a href="index.php">Posts</a>
+                                <a href="cars.php">Cars</a>
                             </li>
                             <!--<li class="breadcrumb-item">Blank Page</li>-->
                         </ol>
                     </div><!-- /.col-lg-12 -->
                     <!-- Page Content -->
                     <div class="col-lg-12">
-                        <h1>All Posts</h1>
+                        <h1>All Cars</h1>
                         <hr>
                     </div><!-- /.col-lg-12 -->
                 </div><!-- /.row -->
                 <div class="row">
                     <div class="col-lg-12">
                         <?php 
-                            if (isset($_GET['source'])) {
-                                $source = $_GET['source'];
+                            if (isset($_GET['action'])) {
+                                $action = $_GET['action'];
                             } else {
-                                $source = "";
+                                $action = "";
                             }
-                            switch ($source) {
-                                case 'add_post':
-                                    include "includes/add-post.php";
+                            switch ($action) {
+                                case 'add':
+                                    include "includes/add-car.php";
                                     break;
-                                case 'edit_post':
-                                    include "includes/edit-post.php";
+                                case 'edit':
+                                    include "includes/edit-car.php";
                                     break;
                                 default:
-                                    include "includes/view-all-posts.php";
+                                    include "includes/view-all-cars.php";
                                     break;
                             }
                         ?>
                     </div><!-- /.col-lg-12 -->
                 </div><!-- /.row -->
             </div><!-- /.container-fluid -->
-            <?php include "includes/admin-footer.php" ?>
+            <?php include "includes/_admin-footer.php" ?>
         </div><!-- /.content-wrapper -->
     </div><!-- /#wrapper -->
-    <?php include "includes/admin-logout-modal.php" ?>
-<?php include "includes/admin-body-end.php" ?>
+    <?php include "includes/_admin-logout-modal.php" ?>
+<?php include "includes/_admin-body-end.php" ?>

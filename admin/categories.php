@@ -1,9 +1,7 @@
-<?php include "includes/admin-head-start.php"; ?>
-    <title>Categories</title>
-<?php include "includes/admin-head-end.php"; ?>
-<?php include "includes/admin-navbar.php" ?>
+<?php include "includes/_admin-head.php"; ?>
+<?php include "includes/_admin-navbar.php" ?>
     <div id="wrapper">
-        <?php include "includes/admin-sidebar.php" ?>
+        <?php include "includes/_admin-sidebar.php" ?>
         <div id="content-wrapper">
             <div class="container-fluid">
                 <div class="row">
@@ -21,39 +19,43 @@
                         <h1>Categories</h1>
                         <hr>
                     </div><!-- /.col-lg-12 -->
-                    <div class="col-lg-6">
-                        <?php insertCategories(); ?>
-                        <?php
-                            if(!isset($_GET['edit'])) {
-                                include "includes/add-categories.php";
-                                }
-                        ?>
-                        <?php
-                            if(isset($_GET['edit'])) {
-                                $cat_id = $_GET['edit'];
-                                include "includes/update-categories.php";
-                                }
-                        ?>
-                    </div><!-- /.col-lg-6 -->
-                    <div class="col-lg-6">
+                    <div class="col-lg-8">
                         <table class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Category Title</th>
+                                    <th>Name</th>
+                                    <th>Daily Price</th>
+                                    <th>Description</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php findAllCategories(); ?>
-                                <?php deleteCategories(); ?>
+                                <?php displayAllCategories(); ?>
                             </tbody>
                         </table>
-                    </div><!-- /.col-lg-6 -->
+                    </div><!-- /.col-lg-8 -->
+                    <div class="col-lg-4">
+                        <?php
+                        if(!isset($_GET['edit'])) {
+                            include "includes/add-categories.php";
+                        }
+                        ?>
+
+                        <?php
+                        if(isset($_GET['edit'])) {
+                            $cat_id = $_GET['edit'];
+                            include "includes/edit-categories.php";
+                        }
+                        ?>
+                        
+                        <?php deleteCategory(); ?>
+                        <?php insertCategory(); ?>
+                    </div><!-- /.col-lg-4 -->
                 </div><!-- /.row -->
             </div><!-- /.container-fluid -->
-            <?php include "includes/admin-footer.php" ?>
+            <?php include "includes/_admin-footer.php" ?>
         </div><!-- /.content-wrapper -->
     </div><!-- /#wrapper -->
-    <?php include "includes/admin-logout-modal.php" ?>
-<?php include "includes/admin-body-end.php" ?>
+    <?php include "includes/_admin-logout-modal.php" ?>
+<?php include "includes/_admin-body-end.php" ?>

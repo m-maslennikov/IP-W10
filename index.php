@@ -17,14 +17,14 @@
         <div class="carousel-item active" style="background-image: url('images/cars2.png')">
           <div class="carousel-caption d-none d-md-block">
             <h3 class="text-dark">We have different cars available</h3>
-            <a href="#" class="btn btn-outline-dark btn-lg" role="button" aria-pressed="true">View more</a>
+            <a href="cars.php" class="btn btn-outline-dark btn-lg" role="button" aria-pressed="true">View more</a>
           </div>
         </div>
         <!-- Slide Two - Set the background image for this slide in the line below -->
         <div class="carousel-item" style="background-image: url('http://placehold.it/1920x1080')">
           <div class="carousel-caption d-none d-md-block">
-            <h3>Premium</h3>
-            <a href="#" class="btn btn-outline-dark btn-lg" role="button" aria-pressed="true">View more</a>
+            <h3>Try our Premium cars</h3>
+            <a href="cars.php?action=view_category&category_id=2" class="btn btn-outline-dark btn-lg" role="button" aria-pressed="true">View more</a>
           </div>
         </div>
         <!-- Slide Three - Set the background image for this slide in the line below -->

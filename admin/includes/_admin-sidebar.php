@@ -15,44 +15,27 @@
         </a>
       </li>
       
-      <li class="nav-item dropdown"> <!--Posts Menu-->
-        <a class="nav-link dropdown-toggle" href="" id="postsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-fw fa-folder"></i>
-          <span>Posts</span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="postsDropdown">
-          <h6 class="dropdown-header">Actions:</h6>
-          <a class="dropdown-item" href="posts.php?source=add_post">Add Post</a>
-          <a class="dropdown-item" href="posts.php">View All Posts</a>
-        </div>
-      </li>
-
-      <li class="nav-item dropdown"> <!--Users Menu-->
-        <a class="nav-link dropdown-toggle" href="#" id="usersDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-fw fa-folder"></i>
-          <span>Users</span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="usersDropdown">
-          <h6 class="dropdown-header">Actions:</h6>
-          <a class="dropdown-item" href="#">Add User</a>
-          <a class="dropdown-item" href="#">View All Users</a>
-          <a class="dropdown-item" href="#">Forgot Password</a>
-          <div class="dropdown-divider"></div>
-          <h6 class="dropdown-header">Other Pages:</h6>
-          <a class="dropdown-item" href="404.html">404 Page</a>
-          <a class="dropdown-item active" href="blank.html">Blank Page</a>
-        </div>
-      </li>
-
       <li class="nav-item dropdown"> <!--Cars Menu-->
-        <a class="nav-link dropdown-toggle" href="#" id="carsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle" href="" id="carsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-fw fa-folder"></i>
           <span>Cars</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="carsDropdown">
           <h6 class="dropdown-header">Actions:</h6>
-          <a class="dropdown-item" href="#">Add Car</a>
-          <a class="dropdown-item" href="#">View All Cars</a>
+          <a class="dropdown-item" href="cars.php?action=add">Add Cars</a>
+          <a class="dropdown-item" href="cars.php">View All Cars</a>
+        </div>
+      </li>
+
+      <li class="nav-item dropdown"> <!--Accounts Menu-->
+        <a class="nav-link dropdown-toggle" href="#" id="accountsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-fw fa-folder"></i>
+          <span>Accounts</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="accountsDropdown">
+          <h6 class="dropdown-header">Actions:</h6>
+          <a class="dropdown-item" href="accounts.php?action=add">Add Account</a>
+          <a class="dropdown-item" href="accounts.php">View All Accounts</a>
         </div>
       </li>
 
@@ -63,9 +46,9 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           <h6 class="dropdown-header">Login Screens:</h6>
-          <a class="dropdown-item" href="login.html">Login</a>
-          <a class="dropdown-item" href="register.html">Register</a>
-          <a class="dropdown-item" href="forgot-password.html">Forgot Password</a>
+          <a class="dropdown-item" href="../user/login.php">Login</a>
+          <a class="dropdown-item" href="../user/register.php">Register</a>
+          <a class="dropdown-item" href="../user/forgot-password.php">Forgot Password</a>
           <div class="dropdown-divider"></div>
           <h6 class="dropdown-header">Other Pages:</h6>
           <a class="dropdown-item" href="404.html">404 Page</a>
@@ -81,6 +64,12 @@
         <a class="nav-link" href="tables.html">
           <i class="fas fa-fw fa-table"></i>
           <span>Tables</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="profile.php">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Profile</span>
+        </a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="../index.php">
