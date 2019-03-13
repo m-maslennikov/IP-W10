@@ -100,7 +100,8 @@ function addCar() {
                 VALUES ('{$car_make}','{$car_model}','{$car_colour}','{$car_status}','{$car_body_type}','{$car_power}','{$category_id}','{$car_image}','{$car_doors}','{$car_seats}')";
         $add_car_query = mysqli_query($connection, $query);
         validateQuery($add_car_query);
-        header("Location: cars.php");
+        echo "Car added. <a href='cars.php'>Go to cars</a>";
+        //header("Location: cars.php");
     }
 }
 
@@ -159,6 +160,30 @@ function deleteCar() {
     }
 }
 
+function enableCar() {
+    global $connection;
+    if(isset($_GET['enable'])) {
+        global $connection;
+        $car_id = $_GET['enable'];
+        $query = "UPDATE cars SET car_status = 'Available' WHERE car_id = $car_id";
+        $make_enable_query = mysqli_query($connection,$query);
+        validateQuery($make_enable_query);
+        header("Location: cars.php");
+    }
+}
+
+function disableCar() {
+    global $connection;
+    if(isset($_GET['disable'])) {
+        global $connection;
+        $car_id = $_GET['disable'];
+        $query = "UPDATE cars SET car_status = 'Available' WHERE car_id = $car_id";
+        $make_disable_query = mysqli_query($connection,$query);
+        validateQuery($make_disable_query);
+        header("Location: cars.php");
+    }
+}
+
 function addAccount() {
     global $connection;
     if (isset($_POST['add_account'])) {
@@ -169,7 +194,8 @@ function addAccount() {
                 VALUES ('{$account_password}','{$account_email}','{$account_type}')";
         $add_account_query = mysqli_query($connection, $query);
         validateQuery($add_account_query);
-        header("Location: accounts.php");
+        echo "User created. <a href='accounts.php'>Go to accounts</a>";
+        //header("Location: accounts.php");
     }
 }
 
@@ -206,6 +232,30 @@ function deleteAccount() {
         $query = "DELETE FROM accounts WHERE account_id = {$account_id}";
         $delete_account_query = mysqli_query($connection, $query);
         validateQuery($delete_account_query);
+        header("Location: accounts.php");
+    }
+}
+
+function enableAccount() {
+    global $connection;
+    if(isset($_GET['enable'])) {
+        global $connection;
+        $account_id = $_GET['enable'];
+        $query = "UPDATE accounts SET account_status = 'Enabled' WHERE account_id = $account_id";
+        $make_enable_query = mysqli_query($connection,$query);
+        validateQuery($make_enable_query);
+        header("Location: accounts.php");
+    }
+}
+
+function disableAccount() {
+    global $connection;
+    if(isset($_GET['disable'])) {
+        global $connection;
+        $account_id = $_GET['disable'];
+        $query = "UPDATE accounts SET account_status = 'Disabled' WHERE account_id = $account_id";
+        $make_disable_query = mysqli_query($connection,$query);
+        validateQuery($make_disable_query);
         header("Location: accounts.php");
     }
 }

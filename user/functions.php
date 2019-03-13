@@ -28,9 +28,10 @@ function login() {
 function register() {
     global $connection;
     if (isset($_POST['register_account'])) {
-        $account_email = $_POST['account_email'];
-        $account_password = $_POST['account_password'];
-        $account_password_confirmation = $_POST['account_password_confirmation'];
+        $account_email = mysqli_real_escape_string($connection, $_POST['account_email']);
+        $account_password = mysqli_real_escape_string($connection, $_POST['account_password']);
+        $account_password_confirmation = mysqli_real_escape_string($connection, $_POST['account_password_confirmation']);
+
         $query = "INSERT INTO accounts (account_email, account_password) 
                 VALUES ('{$account_email}','{$account_password}')";
         $register_account_query = mysqli_query($connection, $query);
