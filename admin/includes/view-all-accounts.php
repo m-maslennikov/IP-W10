@@ -64,6 +64,7 @@ if(isset($_POST['checkboxArray'])){
                         <th><input type="checkbox" name="bulk_option" id="selectAllBoxes"></th>
                         <th>ID</th>
                         <th>Email</th>
+                        <th>Full Name</th>
                         <th>Status</th>
                         <th>Type</th>
                         <th>Actions</th>
@@ -79,6 +80,8 @@ if(isset($_POST['checkboxArray'])){
                     $account_type = $row['account_type'];
                     $account_status = $row['account_status'];
                     $account_email = $row['account_email'];
+                    $account_first_name = $row['account_first_name'];
+                    $account_last_name = $row['account_last_name'];
                     echo "<tr>";
                     ?>
 
@@ -87,6 +90,7 @@ if(isset($_POST['checkboxArray'])){
                     <?php
                         echo "<td>{$account_id}</td>";
                         echo "<td>{$account_email}</td>";
+                        echo "<td>{$account_first_name} {$account_last_name}</td>";
                         echo "<td>{$account_status}</td>";
                         echo "<td>{$account_type}</td>";
                         echo "

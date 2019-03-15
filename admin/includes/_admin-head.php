@@ -2,8 +2,11 @@
 <?php session_start(); ?>
 
 <?php 
-if (!isset($_SESSION['account_type'])) {
-    header("Location: ../user/login.php");
+if (isset($_SESSION['account_type'])) {
+    $account_type = $_SESSION['account_type'];
+    if ($account_type == 'customer' ) {
+        header("Location: ../");
+    }
 }
 ?>
 

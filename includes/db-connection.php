@@ -2,7 +2,7 @@
     $db['db_host'] = '109.106.214.69:443';
     $db['db_user'] = 'week10';
     $db['db_pass'] = 'pass@word1';
-    $db['db_name'] = 'week8';
+    $db['db_name'] = 'rentacar';
 
     foreach ($db as $key => $value) {
         define(strtoupper($key), $value);

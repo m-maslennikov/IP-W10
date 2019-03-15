@@ -2,28 +2,47 @@
 
 function login() {
     global $connection;
+    $secret_key = '6LcZx5cUAAAAAFnhHQgi7FQkr97oz1QiZ2BOPyqp'; // Google reCaptcha secret key
     if (isset($_POST['login'])) {
-        $filled_account_email = mysqli_real_escape_string($connection, $_POST['account_email']);
-        $filled_account_password = mysqli_real_escape_string($connection, $_POST['account_password']);
-        $query = "SELECT * FROM accounts WHERE account_email='$filled_account_email' AND account_password='$filled_account_password'";
-        $select_account_query = mysqli_query($connection, $query);
-        validateQuery($select_account_query);
+        if(!empty($_POST['g-recaptcha-response'])){
+            // Request the Google server to validate captcha
+            $request = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret_key.'&response='.$_POST['g-recaptcha-response']);
+            // The result is in a JSON format. Decoding.
+            $response = json_decode($request);
+            // If Captcha is ok - go check credentials and login
+            if($response->success){
+                $filled_account_email = mysqli_real_escape_string($connection, $_POST['account_email']);
+                $filled_account_password = mysqli_real_escape_string($connection, $_POST['account_password']);
+                $query = "SELECT * FROM accounts WHERE account_email='$filled_account_email' AND account_password='$filled_account_password'";
+                $select_account_query = mysqli_query($connection, $query);
+                validateQuery($select_account_query);
 
-        while($row = mysqli_fetch_assoc($select_account_query)) {
-            $account_email = $row['account_email'];
-            $account_password = $row['account_password'];
-            $account_type = $row['account_type'];
-        }
+                while($row = mysqli_fetch_assoc($select_account_query)) {
+                    $account_email = $row['account_email'];
+                    $account_password = $row['account_password'];
+                    $account_type = $row['account_type'];
+                    $account_status = $row['account_status'];
+                }
 
-        if ($filled_account_email === $account_email && $filled_account_password === $account_password) {
-            $_SESSION['account_email'] = $account_email;
-            $_SESSION['account_type'] = $account_type;
-            header('location: ../admin');
+                if ($filled_account_email === $account_email && $filled_account_password === $account_password && $account_status === 'enabled') {
+                    $_SESSION['account_email'] = $account_email;
+                    $_SESSION['account_type'] = $account_type;
+                    if ($account_type == 'customer'){
+                        header('location: ../');
+                    } else {
+                        header('location: ../admin');
+                    }
+                } else {
+                    echo "<h4 class='text-center'>Something went wrong <br> Please try again</h4>";
+                    //header('location: login.php');
+                }
+            } 
         } else {
-            header('location: login.php');
+            echo "<h4 class='text-center'>Are you a robot?</h4>";
         }
     }
 }
+
 
 function register() {
     global $connection;
