@@ -1,11 +1,6 @@
 <?php
 
-function validateQuery($result) {
-    global $connection;
-    if(!$result) {
-        die("QUERY FAILED. " . mysqli_error($connection));
-    }
-}
+// TO DO: WRITE COMMENTS / REFACTOR.
 
 function insertCategory() {
     global $connection;
@@ -203,8 +198,15 @@ function updateAccount($account_id) {
     global $connection;
     if (isset($_POST['update_account'])) {
         $account_password = $_POST['account_password'];
+        $account_password = password_hash($account_password, PASSWORD_BCRYPT, array('cost' => 12));
         $account_email = $_POST['account_email'];
         $account_type = $_POST['account_type'];
+        $account_status = $_POST['account_status'];
+        $account_first_name = $_POST['account_first_name'];
+        $account_last_name = $_POST['account_last_name'];
+        $account_dob = $_POST['account_dob'];
+        $account_address = $_POST['account_address'];
+        $account_phone = $_POST['account_phone'];
         if (empty($account_password)) {
             $query = "SELECT * FROM accounts WHERE account_id = $account_id";
             $select_account_password_query = mysqli_query($connection, $query);
@@ -216,7 +218,13 @@ function updateAccount($account_id) {
         $query = "UPDATE accounts SET 
                 account_password = '{$account_password}', 
                 account_email = '{$account_email}', 
-                account_type = '{$account_type}' 
+                account_type = '{$account_type}',
+                account_status = '{$account_status}',
+                account_first_name = '{$account_first_name}',
+                account_last_name = '{$account_last_name}',
+                account_dob = '{$account_dob}',
+                account_address = '{$account_address}',
+                account_phone = '{$account_phone}'
                 WHERE account_id = {$account_id}";
         $update_account_query = mysqli_query($connection, $query);
         validateQuery($update_account_query);
@@ -259,5 +267,73 @@ function disableAccount() {
         header("Location: accounts.php");
     }
 }
+
+function acceptBooking() {
+    global $connection;
+    if(isset($_GET['accept'])) {
+        global $connection;
+        $booking_id = $_GET['accept'];
+        $query = "UPDATE bookings SET booking_status = 'Accepted' WHERE booking_id = $booking_id";
+        $make_accept_query = mysqli_query($connection,$query);
+        validateQuery($make_accept_query);
+        header("Location: bookings.php");
+    }
+}
+
+function rejectBooking() {
+    global $connection;
+    if(isset($_GET['reject'])) {
+        global $connection;
+        $booking_id = $_GET['reject'];
+        $query = "UPDATE bookings SET booking_status = 'Rejected' WHERE booking_id = $booking_id";
+        $make_reject_query = mysqli_query($connection,$query);
+        validateQuery($make_reject_query);
+        header("Location: bookings.php");
+    }
+}
+
+function updateProfile() {
+    global $connection;
+    if (isset($_POST['update_profile'])) {
+        $account_password = $_POST['account_password'];
+        $account_password = password_hash($account_password, PASSWORD_BCRYPT, array('cost' => 12));
+        $account_email = $_POST['account_email'];
+        $account_first_name = $_POST['account_first_name'];
+        $account_last_name = $_POST['account_last_name'];
+        $account_phone = $_POST['account_phone'];
+        $account_address = $_POST['account_address'];
+        $account_dob = $_POST['account_dob'];
+        $account_id = $_SESSION['account_id'];
+        
+        if (empty($account_password)) {
+            $query = "SELECT * FROM accounts WHERE account_id = $account_id";
+            $select_account_query = mysqli_query($connection, $query);
+            validateQuery($select_account_query);
+            while($row = mysqli_fetch_assoc($select_account_query)) {
+                $account_password = $row['account_password'];
+            }
+        }
+        $query = "UPDATE accounts SET 
+                account_password = '{$account_password}', 
+                account_email = '{$account_email}',
+                account_first_name = '{$account_first_name}',
+                account_last_name = '{$account_last_name}',
+                account_phone = '{$account_phone}',
+                account_address = '{$account_address}',
+                account_dob = '{$account_dob}'
+                WHERE account_id = {$account_id}";
+        $update_profile_query = mysqli_query($connection, $query);
+        validateQuery($update_profile_query);
+        $_SESSION['account_email'] = $account_email;
+        //header("Location: profile.php");
+        echo "<div class=\"alert alert-success alert-dismissible fade show\" role=\"alert\">
+                Your profile has been updated.
+                <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">
+                <span aria-hidden=\"true\">&times;</span>
+                </button>
+            </div>";
+    }
+}
+
 
 ?>

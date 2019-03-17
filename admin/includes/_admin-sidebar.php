@@ -39,6 +39,18 @@
         </div>
       </li>
 
+      <li class="nav-item dropdown"> <!--Bookings Menu-->
+        <a class="nav-link dropdown-toggle" href="#" id="bookingsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-fw fa-folder"></i>
+          <span>Bookings</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="bookingsDropdown">
+          <h6 class="dropdown-header">Actions:</h6>
+          <a class="dropdown-item" href="bookings.php?action=add">Add Booking</a>
+          <a class="dropdown-item" href="bookings.php">View All bookings</a>
+        </div>
+      </li>
+
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-fw fa-folder"></i>
@@ -64,12 +76,6 @@
         <a class="nav-link" href="tables.html">
           <i class="fas fa-fw fa-table"></i>
           <span>Tables</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="profile.php">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Profile</span>
-        </a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="../index.php">

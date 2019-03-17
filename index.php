@@ -1,9 +1,7 @@
-<?php include "includes/head-start.php"; ?>
-  <title>Modern Business - Start Bootstrap Template</title>
-<?php include "includes/head-end.php"; ?>
+<?php include "includes/_head.php"; ?>
 
   <!-- Navigation -->
-  <?php include "includes/navigation.php"; ?>
+  <?php include "includes/_navbar.php"; ?>
   
   <header>
     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
@@ -49,7 +47,7 @@
   <!-- Page Content -->
   <!-- /.container -->
 
-  <!-- Footer -->
-  <?php include "includes/footer.php"; ?>
-  
-<?php include "includes/body-end.php"; ?>
+<?php 
+// Include all common scripts and close BODY tag.
+include "includes/_body-end.php"; 
+?>

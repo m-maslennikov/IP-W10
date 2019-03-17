@@ -1,7 +1,7 @@
 <?php deleteAccount(); ?>
 <?php enableAccount(); ?>
 <?php disableAccount(); ?>
-
+<?php include "includes/_admin-delete-modal.php"; ?>
 <?php 
 if(isset($_POST['checkboxArray'])){
     foreach ($_POST['checkboxArray'] as $account_id) {
@@ -72,7 +72,28 @@ if(isset($_POST['checkboxArray'])){
                 </thead>
                 <tbody>
                 <?php
+                $items_per_page = 10;
                 $query = 'SELECT * FROM accounts';
+                $select_accounts = mysqli_query($connection, $query);
+                $acoounts_count = mysqli_num_rows($select_accounts);
+                $acoounts_count = ceil($acoounts_count / $items_per_page);
+
+                if(isset($_GET['page'])){
+                    $current_page = $_GET['page'];
+                    $page = $_GET['page'];
+                } else {
+                    $page = "";
+                    $current_page = "";
+                }
+
+                if($page == "" || $page == 1){
+                    $current_page = 1;
+                    $page = 0;
+                } else {
+                    $page = ($page * $items_per_page) - $items_per_page;
+                }
+                
+                $query = "SELECT * FROM accounts LIMIT $page, $items_per_page";
                 $select_accounts = mysqli_query($connection, $query);
                 validateQuery($select_accounts);
                 while($row = mysqli_fetch_assoc($select_accounts)) {
@@ -88,6 +109,7 @@ if(isset($_POST['checkboxArray'])){
                     <td><input class="checkboxes" type="checkbox" name="checkboxArray[]" value="<?php echo $account_id; ?>" id="selectAllBoxes"></td>
 
                     <?php
+                    //<a href='accounts.php?delete={$account_id}' class='text-danger px-1' onclick=\"return confirm('Are you sure?')\"><i class='fas fa-trash'></i></a>
                         echo "<td>{$account_id}</td>";
                         echo "<td>{$account_email}</td>";
                         echo "<td>{$account_first_name} {$account_last_name}</td>";
@@ -95,18 +117,33 @@ if(isset($_POST['checkboxArray'])){
                         echo "<td>{$account_type}</td>";
                         echo "
                             <td>
-                                
                                 <a href='accounts.php?enable={$account_id}' class='text-success px-1'><i class='fas fa-check'></i></a>
                                 <a href='accounts.php?disable={$account_id}' class='text-warning px-1'><i class='fas fa-ban'></i></a>
                                 <a href='accounts.php?action=edit&account_id={$account_id}' class='text-dark px-1'><i class='fas fa-pencil-alt'></i></a>
-                                <a href='accounts.php?delete={$account_id}' class='text-danger px-1'><i class='fas fa-trash'></i></a>
-                                
+                                <a href='javascript:void(0);' rel='$account_id' class='text-danger px-1 delete-link'><i class='fas fa-trash'></i></a>
                             </td>";
                     echo "</tr>";
                 }
                 ?>
                 </tbody>
             </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <nav>
+                <ul class="pagination">
+                    <?php
+                    for($i = 1; $i <= $acoounts_count; $i++){
+                        if($i == $current_page){
+                            echo "<li class='page-item active'><a class='page-link' href='accounts.php?page=$i'>$i</a></li>";
+                        } else {
+                            echo "<li class='page-item'><a class='page-link' href='accounts.php?page=$i'>$i</a></li>";
+                        }
+                    }
+                    ?>
+                </ul>
+            </nav>
         </div>
     </div>
 </form>

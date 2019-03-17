@@ -13,20 +13,23 @@ function login() {
             if($response->success){
                 $filled_account_email = mysqli_real_escape_string($connection, $_POST['account_email']);
                 $filled_account_password = mysqli_real_escape_string($connection, $_POST['account_password']);
-                $query = "SELECT * FROM accounts WHERE account_email='$filled_account_email' AND account_password='$filled_account_password'";
+                $query = "SELECT * FROM accounts WHERE account_email='$filled_account_email'";
                 $select_account_query = mysqli_query($connection, $query);
                 validateQuery($select_account_query);
 
                 while($row = mysqli_fetch_assoc($select_account_query)) {
+                    $account_id = $row['account_id'];
                     $account_email = $row['account_email'];
                     $account_password = $row['account_password'];
                     $account_type = $row['account_type'];
                     $account_status = $row['account_status'];
                 }
 
-                if ($filled_account_email === $account_email && $filled_account_password === $account_password && $account_status === 'enabled') {
+                // Credentials validation
+                if (password_verify($filled_account_password, $account_password) && $account_status === 'enabled') {
                     $_SESSION['account_email'] = $account_email;
                     $_SESSION['account_type'] = $account_type;
+                    $_SESSION['account_id'] = $account_id;
                     if ($account_type == 'customer'){
                         header('location: ../');
                     } else {
@@ -50,6 +53,8 @@ function register() {
         $account_email = mysqli_real_escape_string($connection, $_POST['account_email']);
         $account_password = mysqli_real_escape_string($connection, $_POST['account_password']);
         $account_password_confirmation = mysqli_real_escape_string($connection, $_POST['account_password_confirmation']);
+
+        $account_password = password_hash($account_password, PASSWORD_BCRYPT, array('cost' => 12));
 
         $query = "INSERT INTO accounts (account_email, account_password) 
                 VALUES ('{$account_email}','{$account_password}')";

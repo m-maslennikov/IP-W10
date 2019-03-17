@@ -5,14 +5,14 @@
             <!-- Breadcrumbs-->
             <ol class="breadcrumb">
                 <li class="breadcrumb-item active">
-                    <a href="cars.php">Cars</a>
+                    <a href="bookings.php">Bookings</a>
                 </li>
                 <!--<li class="breadcrumb-item">Blank Page</li>-->
             </ol>
         </div><!-- /.col-lg-12 -->
         <!-- Page Content -->
         <div class="col-lg-12">
-            <h1>All Cars</h1>
+            <h1>All Bookings</h1>
             <hr>
         </div><!-- /.col-lg-12 -->
     </div><!-- /.row -->
@@ -26,13 +26,13 @@
                 }
                 switch ($action) {
                     case 'add':
-                        include "includes/add-car.php";
+                        include "includes/add-booking.php";
                         break;
                     case 'edit':
-                        include "includes/edit-car.php";
+                        include "includes/edit-booking.php";
                         break;
                     default:
-                        include "includes/view-all-cars.php";
+                        include "includes/view-all-bookings.php";
                         break;
                 }
             ?>

@@ -18,6 +18,17 @@ if(isset($_GET['car_id'])) {
     $car_seats = $row['car_seats'];
   }
 }
+
+if(isset($_POST['book'])) {
+  $booking_booked_start_date = $_POST['booking_booked_start_date'];
+  $booking_booked_end_date = $_POST['booking_booked_end_date'];
+  $account_id = $_SESSION['account_id'];
+  $query = "INSERT INTO bookings (booking_booked_start_date, booking_booked_end_date, account_id, car_id) 
+                VALUES ('{$booking_booked_start_date}','{$booking_booked_end_date}','{$account_id}','{$car_id}')";
+  $make_new_booking_query = mysqli_query($connection, $query);
+  validateQuery($make_new_booking_query);
+}
+
 ?>
     <!-- Car Details Row -->
     <div class="row">
@@ -37,6 +48,25 @@ if(isset($_GET['car_id'])) {
           <li><?php echo $car_doors; ?></li>
           <li><?php echo $car_seats; ?></li>
         </ul>
+        <?php if(isset($_SESSION['account_id'])): ?>
+        <form action="" method="post">
+          <div class="form-group">
+            <label for="booking_booked_start_date">Start Date</label>
+            <input type="date" name="booking_booked_start_date" id="booking_booked_start_date" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="booking_booked_end_date">End Date</label>
+            <input type="date" name="booking_booked_end_date" id="booking_booked_end_date" class="form-control">
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary" name="book">Book</button>
+            <button type="reset" class="btn btn-danger">Reset</button>
+          </div>
+        </form>
+        <?php else: ?>
+        <a href="user/login.php" class="btn btn-primary" role="button" aria-pressed="true">Log In to Book</a>
+        <?php endif; ?>
+
       </div>
 
     </div>

@@ -1,9 +1,7 @@
-<?php include "includes/head-start.php"; ?>
-  <title>Modern Business - Start Bootstrap Template</title>
-<?php include "includes/head-end.php"; ?>
+<?php include "includes/_head.php"; ?>
 
   <!-- Navigation -->
-  <?php include "includes/navigation.php"; ?>
+  <?php include "includes/_navbar.php"; ?>
   <!-- Page Content -->
   <div class="container">
 
@@ -81,7 +79,16 @@
   </div>
   <!-- /.container -->
 
-  <!-- Footer -->
-  <?php include "includes/footer.php"; ?>
+  <!-- Contact form JavaScript -->
+  <!-- Do not edit these files! In order to set the email address and subject line for the contact form go to the bin/contact_me.php file. -->
+  <script src="js/jqBootstrapValidation.js"></script>
+  <script src="js/contact_me.js"></script>
+  
+  <!-- Google Map-->
+  <script src="js/googleMap.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2vEBgLA6uUDcbWDj01hEh4r52cVBg3-M&amp;callback=myMap"></script>
 
-<?php include "includes/contact-body-end.php"; ?>
+<?php 
+// Include all common scripts and close BODY tag.
+include "includes/_body-end.php"; 
+?>

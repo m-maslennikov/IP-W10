@@ -1,4 +1,4 @@
-<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
   <div class="container">
     <a class="navbar-brand" href="index.php">Rent-a-Car</a>
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -16,7 +16,7 @@
           <?php echo $_SESSION['account_email']; ?>
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownPortfolio">
-          <a class="dropdown-item" href="admin/profile.php">My Profile</a>
+          <a class="dropdown-item" href="profile.php">My Profile</a>
           <a class="dropdown-item" href="user/logout.php">Logout</a>
         </div>
       </li>
