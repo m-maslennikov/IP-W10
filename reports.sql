@@ -22,6 +22,10 @@ FROM total_bookings AS t
 LEFT JOIN successful_bookings AS s ON t.car_id=s.car_id;
 
 
+
+
+
+
 SELECT cat.category_id, cat.category_name, count(cat.category_id) AS 'Successful booking number'
 FROM bookings AS b 
 INNER JOIN cars AS c ON b.car_id=c.car_id 

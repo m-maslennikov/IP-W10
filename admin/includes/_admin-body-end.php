@@ -1,4 +1,9 @@
-        <?php include "includes/_admin-footer.php" ?>
+            <!-- Sticky Footer -->
+            <footer class="sticky-footer">
+                <div class="container my-auto">
+                    <p class="m-0 text-center">Copyright © Rent-a-Car Aspire2 LLC, 2019</p>
+                </div>
+            </footer>
         </div><!-- /.content-wrapper -->
     </div><!-- /#wrapper -->
 
