@@ -22,6 +22,9 @@ include("functions/init.php");
     
     <!-- Custom style -->
     <link href="css/style.css" rel="stylesheet">
+    
+    <!-- Google Captcha -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
     <title>Rent-a-Car - Week 10</title>
 
