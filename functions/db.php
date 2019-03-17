@@ -24,11 +24,17 @@ function fetchArray($result) {
     return mysqli_fetch_array($result);
 }
 
+// Shortcut function for validating executed query
 function validateQuery($result) {
     global $connection;
     if(!$result){
         diedie("QUERY FAILED. " . mysqli_error($connection));
     }
+}
+
+// Shortcut function for row count
+function rowCount($result) {
+    return mysqli_num_rows($result);
 }
 // ------------------------------------------------------------------
 

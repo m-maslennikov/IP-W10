@@ -1,5 +1,40 @@
 <?php
 
+// ------------------------------------------------------------------
+// General helper functions
+// ------------------------------------------------------------------
+
+function clean($string) {
+    return htmlentities($string);
+}
+
+function redirect($location) {
+    return header("Location: {$location}");
+}
+
+function setSessionMessage($message){
+    if(!empty($message)){
+        $_SESSION['message'] = $message
+    } else {
+        $message = "";
+    }
+}
+
+function displaySessionMessage() {
+    if (isset($_SESSION['message'])){
+        echo $_SESSION['message'];
+        unset($_SESSION['message']);
+    }
+}
+
+function generateToken() {
+    $token = $_SESSION['token'] = md5(uniqid(mt_rand(), true));
+    return $token;
+}
+// ------------------------------------------------------------------
+// ------------------------------------------------------------------
+
+
 // TO DO: WRITE COMMENTS / REFACTOR.
 
 function insertCategory() {
