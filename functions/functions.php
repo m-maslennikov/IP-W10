@@ -14,7 +14,7 @@ function redirect($location) {
 
 function setSessionMessage($message){
     if(!empty($message)){
-        $_SESSION['message'] = $message
+        $_SESSION['message'] = $message;
     } else {
         $message = "";
     }
