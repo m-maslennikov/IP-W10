@@ -363,8 +363,6 @@ function rejectBooking() {
 function updateProfile() {
     global $connection;
     if (isset($_POST['update_profile'])) {
-        $account_password = $_POST['account_password'];
-        $account_password = password_hash($account_password, PASSWORD_BCRYPT, array('cost' => 12));
         $account_email = $_POST['account_email'];
         $account_first_name = $_POST['account_first_name'];
         $account_last_name = $_POST['account_last_name'];
@@ -372,17 +370,7 @@ function updateProfile() {
         $account_address = $_POST['account_address'];
         $account_dob = $_POST['account_dob'];
         $account_id = $_SESSION['account_id'];
-        
-        if (empty($account_password)) {
-            $query = "SELECT * FROM accounts WHERE account_id = $account_id";
-            $select_account_query = mysqli_query($connection, $query);
-            validateQuery($select_account_query);
-            while($row = mysqli_fetch_assoc($select_account_query)) {
-                $account_password = $row['account_password'];
-            }
-        }
         $query = "UPDATE accounts SET 
-                account_password = '{$account_password}', 
                 account_email = '{$account_email}',
                 account_first_name = '{$account_first_name}',
                 account_last_name = '{$account_last_name}',
@@ -393,16 +381,47 @@ function updateProfile() {
         $update_profile_query = mysqli_query($connection, $query);
         validateQuery($update_profile_query);
         $_SESSION['account_email'] = $account_email;
-        //header("Location: profile.php");
-        echo "<div class=\"alert alert-success alert-dismissible fade show\" role=\"alert\">
-                Your profile has been updated.
-                <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">
-                <span aria-hidden=\"true\">&times;</span>
-                </button>
-            </div>";
     }
 }
 
+function updatePassword($account_id, $password){
+    $password = password_hash($password, PASSWORD_BCRYPT, array('cost' => 12));
+    $query = "UPDATE accounts SET account_password = '$password' WHERE account_id = '$account_id'";
+    $result = query($query);
+    validateQuery($result);
+    displaySuccessAlert("Password has been updated.");
+}
+
+function validateUserPassword(){
+    if(isset($_POST['update_password'])){
+        $account_id                         = $_SESSION['account_id'];
+        $account_password                   = clean($_POST['account_password']);
+        $new_account_password               = clean($_POST['new_account_password']);
+        $new_account_password_confirmation  = clean($_POST['new_account_password_confirmation']);
+
+        if(!empty($account_password) && !empty($new_account_password) && !empty($new_account_password_confirmation)){
+            // go verify current password
+
+            $query = "SELECT account_password FROM accounts WHERE account_id = '$account_id'";
+            $result = query($query);
+            validateQuery($result);
+            if(rowCount($result) == 1) {
+                $row = fetchArray($result);
+                $db_account_password = $row['account_password'];
+                if(password_verify($account_password, $db_account_password)){
+                    // go check new passwords
+                    if($new_account_password !== $new_account_password_confirmation){
+                        displayErrorAlert("New passwords don't match");
+                    } else {
+                        updatePassword($account_id, $new_account_password);
+                    }
+                } else {
+                    displayErrorAlert("Wrong current password.");
+                }
+            }
+        }
+    }
+}
 
 
 // ------------------------------------------------------------------
@@ -519,6 +538,7 @@ function loginUser($email, $password, $remember_me) {
     validateQuery($result);
     if(rowCount($result) == 1) {
         $row = fetchArray($result);
+        $account_id = $row['account_id'];
         $account_email = $row['account_email'];
         $account_password = $row['account_password'];
         $account_type = $row['account_type'];
