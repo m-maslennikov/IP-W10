@@ -22,7 +22,22 @@ function setSessionMessage($message){
 
 function displaySessionMessage() {
     if (isset($_SESSION['message'])){
-        echo $_SESSION['message'];
+        echo "
+        <div aria-live=\"polite\" aria-atomic=\"true\" style=\"position: relative; z-index: 2\">
+            <div class=\"toast fade show\" style=\"position: absolute; top: 10px; right: 10px;\">
+                <div class=\"toast-header\">
+                <strong class=\"mr-auto\">Administrator</strong>
+                <button type=\"button\" class=\"ml-2 mb-1 close\" data-dismiss=\"toast\" aria-label=\"Close\">
+                    <span aria-hidden=\"true\">&times;</span>
+                </button>
+                </div>
+                <div class=\"toast-body\">
+                {$_SESSION['message']}
+                </div>
+            </div>
+        </div>
+        ";
+
         unset($_SESSION['message']);
     }
 }
@@ -50,6 +65,10 @@ function displaySuccessAlert($alert) {
             <span aria-hidden=\"true\">&times;</span>
         </button>
     </div>";    
+}
+
+function sendEmail($email, $subject, $msg, $headers) {
+    return mail($email, $subject, $msg, $headers);
 }
 
 // ------------------------------------------------------------------
@@ -453,6 +472,33 @@ function emailExists($email) {
     }
 }
 
+// Register user
+function registerUser($account_first_name, $account_last_name, $account_email, $account_password) {
+    $account_first_name     = escape($account_first_name);
+    $account_last_name      = escape($account_last_name);
+    $account_email          = escape($account_email);
+    $account_password       = escape($account_password);
+
+    if(emailExists($account_email)){
+        return false;
+    } else {
+        $account_password = password_hash($account_password, PASSWORD_BCRYPT, array('cost' => 12));
+        $account_validation_code = md5($account_email + microtime());
+        $query = "INSERT INTO accounts (account_first_name, account_last_name, account_email, account_password, account_status, account_validation_code) VALUES ('{$account_first_name}','{$account_last_name}','{$account_email}','{$account_password}','disabled','{$account_validation_code}')";
+        query($query);
+        validateQuery($query);
+
+        $subject = "Activate Account";
+        $msg = "Please click the following link to activate account: 
+        http://localhost/ip-w10/activate.php?email=$account_email&code=$account_validation_code";
+        $headers = "From: noreply@rentacar.com";
+
+        sendEmail($email, $subject, $msg, $headers);
+
+        return true;
+    }
+}
+
 // Validate all user input in Register form
 function validateUserReg(){
     $min = 2;
@@ -487,47 +533,34 @@ function validateUserReg(){
             }
         } else {
             if(registerUser($account_first_name, $account_last_name, $account_email, $account_password)){
-                displaySuccessAlert("You are registered");
+                setSessionMessage("You have registered. Please check your email and activate your account.");
+                redirect("index.php");
             }
         }
     }
 }
 
-// Register user
-function registerUser($account_first_name, $account_last_name, $account_email, $account_password) {
-    $account_first_name     = escape($account_first_name);
-    $account_last_name      = escape($account_last_name);
-    $account_email          = escape($account_email);
-    $account_password       = escape($account_password);
-
-    if(emailExists($account_email)){
-        return false;
-    } else {
-        $account_password = password_hash($account_password, PASSWORD_BCRYPT, array('cost' => 12));
-        $query = "INSERT INTO accounts (account_first_name, account_last_name, account_email, account_password, account_status) VALUES ('{$account_first_name}','{$account_last_name}','{$account_email}','{$account_password}','disabled')";
-        query($query);
-        validateQuery($query);
-        return true;
+// Activate User Account
+function activateAccount() {
+    if($_SERVER['REQUEST_METHOD'] == "GET") {
+        if(isset($_GET['email'])) {
+            $account_email = escape(clean($_GET['email']));
+            $account_validation_code = escape(clean($_GET['code']));
+            $query = "SELECT account_id FROM accounts WHERE account_email = '$account_email' AND account_validation_code = '$account_validation_code'";
+            $result = query($query);
+            validateQuery($result);
+            if(rowCount($result) == 1) {
+                $query = "UPDATE accounts SET account_status = 'enabled', account_validation_code = '0' WHERE account_email = '$account_email' AND account_validation_code = '$account_validation_code'";
+                $result = query($query);
+                validateQuery($result);
+                setSessionMessage("Your account has been activated. You can log in.");
+                redirect("login.php");
+            } else {
+                setSessionMessage("Your account could not be activated.");
+                redirect("login.php");
+            }
+        }
     }
 }
-
-/*
-function register() {
-    global $connection;
-    if (isset($_POST['register_account'])) {
-        $account_email = mysqli_real_escape_string($connection, $_POST['account_email']);
-        $account_password = mysqli_real_escape_string($connection, $_POST['account_password']);
-        $account_password_confirmation = mysqli_real_escape_string($connection, $_POST['account_password_confirmation']);
-
-        $account_password = password_hash($account_password, PASSWORD_BCRYPT, array('cost' => 12));
-
-        $query = "INSERT INTO accounts (account_email, account_password) 
-                VALUES ('{$account_email}','{$account_password}')";
-        $register_account_query = mysqli_query($connection, $query);
-        validateQuery($register_account_query);
-        header("Location: ../index.php");
-    }
-}
-*/
 
 ?>
