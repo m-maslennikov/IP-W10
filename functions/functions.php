@@ -419,6 +419,8 @@ function validateUserPassword(){
                     displayErrorAlert("Wrong current password.");
                 }
             }
+        } else {
+            displayErrorAlert("Passwords should not be empty.");
         }
     }
 }
