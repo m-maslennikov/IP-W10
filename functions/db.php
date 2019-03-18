@@ -28,7 +28,7 @@ function fetchArray($result) {
 function validateQuery($result) {
     global $connection;
     if(!$result){
-        diedie("QUERY FAILED. " . mysqli_error($connection));
+        die("QUERY FAILED. " . mysqli_error($connection));
     }
 }
 

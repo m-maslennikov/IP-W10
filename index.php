@@ -2,7 +2,7 @@
 
   <!-- Navigation -->
   <?php include "includes/_navbar.php"; ?>
-  <?php displaySessionMessage(); ?>
+
   <header>
     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
       <ol class="carousel-indicators">

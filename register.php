@@ -9,7 +9,9 @@
         <div class="card mx-auto my-5">
           <div class="card-header">Register an Account</div>
           <div class="card-body">
+          <?php displaySessionMessage(); ?>
           <?php validateUserReg(); ?>
+          
             <form action="" method="post">
             <div class="form-group">
                 <div class="form-row">

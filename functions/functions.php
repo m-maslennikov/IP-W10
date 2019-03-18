@@ -23,18 +23,11 @@ function setSessionMessage($message){
 function displaySessionMessage() {
     if (isset($_SESSION['message'])){
         echo "
-        <div aria-live=\"polite\" aria-atomic=\"true\" style=\"position: relative; z-index: 2\">
-            <div class=\"toast fade show\" style=\"position: absolute; top: 10px; right: 10px;\">
-                <div class=\"toast-header\">
-                <strong class=\"mr-auto\">Administrator</strong>
-                <button type=\"button\" class=\"ml-2 mb-1 close\" data-dismiss=\"toast\" aria-label=\"Close\">
-                    <span aria-hidden=\"true\">&times;</span>
-                </button>
-                </div>
-                <div class=\"toast-body\">
-                {$_SESSION['message']}
-                </div>
-            </div>
+        <div class=\"alert alert-info alert-dismissible fade show\" role=\"alert\">
+            <strong>Info:</strong><br> {$_SESSION['message']}
+            <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">
+                <span aria-hidden=\"true\">&times;</span>
+            </button>
         </div>
         ";
 
@@ -410,6 +403,151 @@ function updateProfile() {
     }
 }
 
+
+
+// ------------------------------------------------------------------
+// Registration functions
+// ------------------------------------------------------------------
+
+// Check if email already registered
+function emailExists($email) {
+    $email = escape($email);
+    $query = "SELECT account_id FROM accounts WHERE account_email = '$email'";
+    $result = query($query);
+    if(rowCount($result) == 1){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// Register user
+function registerUser($account_first_name, $account_last_name, $account_email, $account_password) {
+    $account_first_name     = escape($account_first_name);
+    $account_last_name      = escape($account_last_name);
+    $account_email          = escape($account_email);
+    $account_password       = escape($account_password);
+
+    if(emailExists($account_email)){
+        return false;
+    } else {
+        $account_password = password_hash($account_password, PASSWORD_BCRYPT, array('cost' => 12));
+        $account_validation_code = md5($account_email . microtime());
+        $query = "INSERT INTO accounts (account_first_name, account_last_name, account_email, account_password, account_status, account_validation_code) VALUES ('{$account_first_name}','{$account_last_name}','{$account_email}','{$account_password}','disabled','{$account_validation_code}')";
+        query($query);
+        validateQuery($query);
+
+        $subject = "Activate Account";
+        $message = "Please click the following link to activate account: 
+        http://localhost/ip-w10/activate.php?email=$account_email&code=$account_validation_code";
+        $headers = "From: noreply@rentacar.com";
+
+        sendEmail($email, $subject, $message, $headers);
+
+        return true;
+    }
+}
+
+// Validate all user input in Register form
+function validateUserReg(){
+    $min = 2;
+    $max = 255;
+    
+    if($_SERVER['REQUEST_METHOD'] == "POST"){
+        $account_first_name             = clean($_POST['account_first_name']);
+        $account_last_name              = clean($_POST['account_last_name']);
+        $account_email                  = clean($_POST['account_email']);
+        $account_password               = clean($_POST['account_password']);
+        $account_password_confirmation  = clean($_POST['account_password_confirmation']);
+
+        if(strlen($account_first_name) < $min || strlen($account_first_name) > $max){
+            $errors[] = "First name must be between 2 and 255 characters";
+        }
+    
+        if(strlen($account_last_name) < $min || strlen($account_first_name) > $max){
+            $errors[] = "Last name must be between 2 and 255 characters";
+        }
+    
+        if($account_password !== $account_password_confirmation){
+            $errors[] = "Passwords don't match";
+        }
+    
+        if(emailExists($account_email)){
+            $errors[] = "$account_email is alredy registered";
+        }
+    
+        if(!empty($errors)){
+            foreach ($errors as $error) {
+                displayErrorAlert($error);
+            }
+        } else {
+            if(registerUser($account_first_name, $account_last_name, $account_email, $account_password)){
+                setSessionMessage("You have registered. Please check your email and activate your account.");
+                redirect("login.php");
+            }
+        }
+    }
+}
+
+// Activate User Account
+function activateAccount() {
+    if($_SERVER['REQUEST_METHOD'] == "GET") {
+        if(isset($_GET['email'])) {
+            $account_email = escape(clean($_GET['email']));
+            $account_validation_code = escape(clean($_GET['code']));
+            $query = "SELECT account_id FROM accounts WHERE account_email = '$account_email' AND account_validation_code = '$account_validation_code'";
+            $result = query($query);
+            validateQuery($result);
+            if(rowCount($result) == 1) {
+                $query = "UPDATE accounts SET account_status = 'enabled', account_validation_code = '0' WHERE account_email = '$account_email' AND account_validation_code = '$account_validation_code'";
+                $result = query($query);
+                validateQuery($result);
+                setSessionMessage("Your account has been activated. You can log in.");
+                redirect("login.php");
+            } else {
+                setSessionMessage("Your account could not be activated.");
+                redirect("login.php");
+            }
+        }
+    }
+}
+
+// Login user
+function loginUser($email, $password, $remember_me) {
+    $query = "SELECT account_id, account_email, account_password, account_type FROM accounts WHERE account_email = '$email'";
+    $result = query($query);
+    validateQuery($result);
+    if(rowCount($result) == 1) {
+        $row = fetchArray($result);
+        $account_email = $row['account_email'];
+        $account_password = $row['account_password'];
+        $account_type = $row['account_type'];
+        if(password_verify($password, $account_password)){
+            if($remember_me == "on"){
+                setcookie('email', $email, time() + 3600);
+            }
+            $_SESSION['account_email'] = $account_email;
+            $_SESSION['account_type'] = $account_type;
+            $_SESSION['account_id'] = $account_id;
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+
+// Check if user is logged in
+function loggedIn(){
+    if(isset($_SESSION['account_email']) || isset($_COOKIE['email'])){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/*
 function login() {
     global $connection;
     $secret_key = '6LcZx5cUAAAAAFnhHQgi7FQkr97oz1QiZ2BOPyqp'; // Google reCaptcha secret key
@@ -455,112 +593,121 @@ function login() {
         }
     }
 }
+*/
 
-// ------------------------------------------------------------------
-// Registration functions
-// ------------------------------------------------------------------
+// Validate Login form
+function validateUserLogin(){
+    if($_SERVER['REQUEST_METHOD'] == "POST") {
+        $account_email = escape(clean($_POST['account_email']));
+        $account_password = escape(clean($_POST['account_password']));
+        $remember_me = $_POST['remember_me'];
 
-// Check if email already registered
-function emailExists($email) {
-    $email = escape($email);
-    $query = "SELECT account_id FROM accounts WHERE account_email = '$email'";
-    $result = query($query);
-    if(rowCount($result) == 1){
-        return true;
-    } else {
-        return false;
-    }
-}
-
-// Register user
-function registerUser($account_first_name, $account_last_name, $account_email, $account_password) {
-    $account_first_name     = escape($account_first_name);
-    $account_last_name      = escape($account_last_name);
-    $account_email          = escape($account_email);
-    $account_password       = escape($account_password);
-
-    if(emailExists($account_email)){
-        return false;
-    } else {
-        $account_password = password_hash($account_password, PASSWORD_BCRYPT, array('cost' => 12));
-        $account_validation_code = md5($account_email + microtime());
-        $query = "INSERT INTO accounts (account_first_name, account_last_name, account_email, account_password, account_status, account_validation_code) VALUES ('{$account_first_name}','{$account_last_name}','{$account_email}','{$account_password}','disabled','{$account_validation_code}')";
-        query($query);
-        validateQuery($query);
-
-        $subject = "Activate Account";
-        $msg = "Please click the following link to activate account: 
-        http://localhost/ip-w10/activate.php?email=$account_email&code=$account_validation_code";
-        $headers = "From: noreply@rentacar.com";
-
-        sendEmail($email, $subject, $msg, $headers);
-
-        return true;
-    }
-}
-
-// Validate all user input in Register form
-function validateUserReg(){
-    $min = 2;
-    $max = 255;
-    
-    if($_SERVER['REQUEST_METHOD'] == "POST"){
-        $account_first_name             = clean($_POST['account_first_name']);
-        $account_last_name              = clean($_POST['account_last_name']);
-        $account_email                  = clean($_POST['account_email']);
-        $account_password               = clean($_POST['account_password']);
-        $account_password_confirmation  = clean($_POST['account_password_confirmation']);
-
-        if(strlen($account_first_name) < $min || strlen($account_first_name) > $max){
-            $errors[] = "First name must be between 2 and 255 characters";
+        if(empty($account_email)) {
+            $errors[] = "Email field can not be empty";
         }
-    
-        if(strlen($account_last_name) < $min || strlen($account_first_name) > $max){
-            $errors[] = "Last name must be between 2 and 255 characters";
+
+        if(empty($account_password)) {
+            $errors[] = "Password field can not be empty";
         }
-    
-        if($account_password !== $account_password_confirmation){
-            $errors[] = "Passwords don't match";
-        }
-    
-        if(emailExists($account_email)){
-            $errors[] = "$account_email is alredy registered";
-        }
-    
+
         if(!empty($errors)){
             foreach ($errors as $error) {
                 displayErrorAlert($error);
             }
         } else {
-            if(registerUser($account_first_name, $account_last_name, $account_email, $account_password)){
-                setSessionMessage("You have registered. Please check your email and activate your account.");
-                redirect("index.php");
+            if(loginUser($account_email,$account_password, $remember_me)){
+                redirect("admin");
+            } else {
+                displayErrorAlert("Your credentials are incorrect");
             }
         }
     }
 }
 
-// Activate User Account
-function activateAccount() {
-    if($_SERVER['REQUEST_METHOD'] == "GET") {
-        if(isset($_GET['email'])) {
-            $account_email = escape(clean($_GET['email']));
-            $account_validation_code = escape(clean($_GET['code']));
-            $query = "SELECT account_id FROM accounts WHERE account_email = '$account_email' AND account_validation_code = '$account_validation_code'";
-            $result = query($query);
-            validateQuery($result);
-            if(rowCount($result) == 1) {
-                $query = "UPDATE accounts SET account_status = 'enabled', account_validation_code = '0' WHERE account_email = '$account_email' AND account_validation_code = '$account_validation_code'";
+// Forgoten password recover
+function recoverPassword(){
+    if($_SERVER['REQUEST_METHOD'] == "POST"){
+        if(isset($_SESSION['token']) && $_POST['token'] === $_SESSION['token']){
+            $account_email = escape($_POST['account_email']);
+            if(emailExists($account_email)){
+                $account_validation_code = md5($account_email . microtime());
+                setcookie('temp_access_code', $account_validation_code, time() + 1800);
+                $query = "UPDATE accounts SET account_validation_code = '$account_validation_code' WHERE account_email = '$account_email'";
                 $result = query($query);
                 validateQuery($result);
-                setSessionMessage("Your account has been activated. You can log in.");
-                redirect("login.php");
+                $subject = "Recover Password";
+                $message = "Your validation code is: $account_validation_code
+                Click the following link to reset your password: 
+                http://localhost/ip-w10/code.php?email=$account_email&code=$account_validation_code";
+                $headers = "From: noreply@rentacar.com";
+                //sendEmail($account_email, $subject, $message, $headers);
+                displaySuccessAlert("Your validation code is: $account_validation_code
+                Click the following link to reset your password: 
+                http://localhost/ip-w10/code.php?email=$account_email&code=$account_validation_code");
             } else {
-                setSessionMessage("Your account could not be activated.");
-                redirect("login.php");
+                displayErrorAlert("This email is not registered");
             }
+        } else {
+            displayErrorAlert("Something went wrong. Please try again.");
         }
     }
 }
 
+// Validate Reset password code
+function validateCode(){
+    if(isset($_COOKIE['temp_access_code'])){
+        if($_SERVER['REQUEST_METHOD'] == "GET"){
+            if(!isset($_GET['email']) && !isset($_GET['code'])){
+                displayErrorAlert("[NOT SET] Wrong link. Ensure you copied emailed link correctly");
+            } elseif(empty($_GET['email']) && empty($_GET['code'])){
+                displayErrorAlert("[EMPTY] Wrong link. Ensure you copied emailed link correctly");
+            }
+        } elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
+            if(isset($_POST['account_validation_code'])){
+                $account_validation_code = escape(clean($_POST['account_validation_code']));
+                $account_email = escape(clean($_GET['email']));
+                $query = "SELECT account_id FROM accounts WHERE account_validation_code = '$account_validation_code' AND account_email = '$account_email'";
+                $result = query($query);
+                validateQuery($result);
+                if(rowCount($result) == 1){
+                    setcookie('temp_access_code', $account_validation_code, time() + 300);
+                    setSessionMessage("Validation code is accepted. Set a new password.");
+                    redirect("reset.php?email=$account_email&code=$account_validation_code");
+                } else {
+                    displayErrorAlert("Wrong validation code. Try again.");
+                }
+            }
+        }
+    } else {
+        setSessionMessage("Your validation code is expired. Try again.");
+        redirect('forgot-password.php');
+    }
+}
+
+// Password reset funtion
+function resetPassword(){
+    if(isset($_COOKIE['temp_access_code'])){
+        if(isset($_GET['email']) && isset($_GET['code'])){
+            if(isset($_SESSION['token']) && isset($_POST['token'])) {
+                if($_POST['token'] === $_SESSION['token']){
+                    $account_password = escape(clean($_POST['account_password']));
+                    $account_password_confirmation = escape(clean($_POST['account_password_confirmation']));
+                    $account_email = escape(clean($_GET['email']));
+                    if($account_password === $account_password_confirmation){
+                        $account_password = password_hash($account_password, PASSWORD_BCRYPT, array('cost' => 12));
+                        $query = "UPDATE accounts SET account_password = '$account_password', account_validation_code = '0' WHERE account_email = '$account_email'";
+                        $result = query($query);
+                        validateQuery($result);
+                        setSessionMessage("Password was successfully updated. You can log in.");
+                        unset($_COOKIE['temp_access_code']);
+                        redirect("login.php");
+                    }
+                }
+            }
+        }
+    } else {
+        setSessionMessage("Your validation code is expired. Try again.");
+        redirect('forgot-password.php');
+    }
+}
 ?>

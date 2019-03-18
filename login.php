@@ -2,33 +2,30 @@
 
 <!-- Navigation -->
 <?php include "includes/_navbar.php"; ?>
-<?php displaySessionMessage(); ?>
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-lg-6">
         <div class="card mx-auto my-5">
-        <?php login(); ?>
+        <?php //loginUser(); ?>
           <div class="card-header">Login</div>
           <div class="card-body">
+          <?php displaySessionMessage(); ?>
+          <?php validateUserLogin(); ?>
+          
             <form action="" method="post">
               <div class="form-group">
-                <div class="form-label-group">
-                  <input type="email" id="account_email" name="account_email" class="form-control" placeholder="Email address" required="required" autofocus="autofocus">
-                  <label for="account_email">Email address</label>
-                </div>
+                <input type="email" id="account_email" name="account_email" class="form-control" placeholder="Email address" required="required" autofocus="autofocus">
               </div>
               <div class="form-group">
-                <div class="form-label-group">
-                  <input type="password" id="account_password" name="account_password" class="form-control" placeholder="Password" required="required">
-                  <label for="account_password">Password</label>
-                </div>
+                <input type="password" id="account_password" name="account_password" class="form-control" placeholder="Password" required="required">
               </div>
-              <div class="g-recaptcha" data-sitekey="6LcZx5cUAAAAAGo0SgYP8CWpaSTlB1s5yattyGxb"></div>
               <div class="form-group">
-                <div class="checkbox">
-                  <!--<label><input type="checkbox" value="remember_me">Remember Password</label>-->
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="remember_me" name="remember_me" value="on">
+                  <label class="custom-control-label" for="remember_me">Remember Me</label>
                 </div>
               </div>
+              <div class="form-group g-recaptcha" data-sitekey="6LcZx5cUAAAAAGo0SgYP8CWpaSTlB1s5yattyGxb"></div>
               <button type="submit" class="btn btn-primary btn-block" name="login">Login</button>
             </form>
             <div class="text-center">
@@ -39,11 +36,6 @@
         </div>
       </div>
     </div>
-
-
-    
-  
-  
   </div>
 
 <?php 

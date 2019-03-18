@@ -17,7 +17,7 @@
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownPortfolio">
           <a class="dropdown-item" href="profile.php">My Profile</a>
-          <a class="dropdown-item" href="user/logout.php">Logout</a>
+          <a class="dropdown-item" href="logout.php">Logout</a>
         </div>
       </li>
       <?php endif ?>
