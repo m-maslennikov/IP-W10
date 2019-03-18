@@ -547,11 +547,11 @@ function loggedIn(){
     }
 }
 
-/*
-function login() {
-    global $connection;
+// Validate Login form
+function validateUserLogin(){
     $secret_key = '6LcZx5cUAAAAAFnhHQgi7FQkr97oz1QiZ2BOPyqp'; // Google reCaptcha secret key
-    if (isset($_POST['login'])) {
+    if($_SERVER['REQUEST_METHOD'] == "POST") {
+
         if(!empty($_POST['g-recaptcha-response'])){
             // Request the Google server to validate captcha
             $request = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret_key.'&response='.$_POST['g-recaptcha-response']);
@@ -559,67 +559,37 @@ function login() {
             $response = json_decode($request);
             // If Captcha is ok - go check credentials and login
             if($response->success){
-                $filled_account_email = mysqli_real_escape_string($connection, $_POST['account_email']);
-                $filled_account_password = mysqli_real_escape_string($connection, $_POST['account_password']);
-                $query = "SELECT * FROM accounts WHERE account_email='$filled_account_email'";
-                $select_account_query = mysqli_query($connection, $query);
-                validateQuery($select_account_query);
-
-                while($row = mysqli_fetch_assoc($select_account_query)) {
-                    $account_id = $row['account_id'];
-                    $account_email = $row['account_email'];
-                    $account_password = $row['account_password'];
-                    $account_type = $row['account_type'];
-                    $account_status = $row['account_status'];
+                $account_email = escape(clean($_POST['account_email']));
+                $account_password = escape(clean($_POST['account_password']));
+                if(empty($_POST['remember_me'])){
+                    $remember_me = "off";
+                } else {
+                    $remember_me = $_POST['remember_me'];
                 }
 
-                // Credentials validation
-                if (password_verify($filled_account_password, $account_password) && $account_status === 'enabled') {
-                    $_SESSION['account_email'] = $account_email;
-                    $_SESSION['account_type'] = $account_type;
-                    $_SESSION['account_id'] = $account_id;
-                    if ($account_type == 'customer'){
-                        header('location: index.php');
-                    } else {
-                        header('location: admin');
+                if(empty($account_email)) {
+                    $errors[] = "Email field can not be empty";
+                }
+
+                if(empty($account_password)) {
+                    $errors[] = "Password field can not be empty";
+                }
+
+                if(!empty($errors)){
+                    foreach ($errors as $error) {
+                        displayErrorAlert($error);
                     }
                 } else {
-                    echo "<h4 class='text-center'>Something went wrong <br> Please try again</h4>";
-                    //header('location: login.php');
+                    if(loginUser($account_email,$account_password, $remember_me)){
+                        redirect("admin");
+                    } else {
+                        displayErrorAlert("Your credentials are incorrect");
+                    }
                 }
-            } 
-        } else {
-            echo "<h4 class='text-center'>Are you a robot?</h4>";
-        }
-    }
-}
-*/
-
-// Validate Login form
-function validateUserLogin(){
-    if($_SERVER['REQUEST_METHOD'] == "POST") {
-        $account_email = escape(clean($_POST['account_email']));
-        $account_password = escape(clean($_POST['account_password']));
-        $remember_me = $_POST['remember_me'];
-
-        if(empty($account_email)) {
-            $errors[] = "Email field can not be empty";
-        }
-
-        if(empty($account_password)) {
-            $errors[] = "Password field can not be empty";
-        }
-
-        if(!empty($errors)){
-            foreach ($errors as $error) {
-                displayErrorAlert($error);
             }
         } else {
-            if(loginUser($account_email,$account_password, $remember_me)){
-                redirect("admin");
-            } else {
-                displayErrorAlert("Your credentials are incorrect");
-            }
+            displayErrorAlert("Are you a robot?");
+            //$errors[] = "Are you a robot?";
         }
     }
 }
@@ -700,6 +670,7 @@ function resetPassword(){
                         validateQuery($result);
                         setSessionMessage("Password was successfully updated. You can log in.");
                         unset($_COOKIE['temp_access_code']);
+                        setcookie('temp_access_code', '', time() - 300);
                         redirect("login.php");
                     }
                 }
