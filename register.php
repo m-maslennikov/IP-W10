@@ -3,34 +3,34 @@
 <!-- Navigation -->
 <?php include "includes/_navbar.php"; ?>
 
-<?php register(); ?>
-
-  <div class="container">
+<div class="container">
     <div class="row justify-content-center">
       <div class="col-lg-6">
         <div class="card mx-auto my-5">
           <div class="card-header">Register an Account</div>
           <div class="card-body">
+          <?php validateUserReg(); ?>
             <form action="" method="post">
-              <div class="form-group">
-                <div class="form-label-group">
-                  <input type="email" id="account_email" name="account_email" class="form-control" placeholder="Email address" required="required">
-                  <label for="account_email">Email address</label>
+            <div class="form-group">
+                <div class="form-row">
+                  <div class="col-lg-6">
+                    <input type="text" id="account_first_name" name="account_first_name" class="form-control" placeholder="First Name" required="required">
+                  </div>
+                  <div class="col-lg-6">
+                    <input type="text" id="account_last_name" name="account_last_name" class="form-control" placeholder="Last Name" required="required">
+                  </div>
                 </div>
+              </div>
+              <div class="form-group">
+                <input type="email" id="account_email" name="account_email" class="form-control" placeholder="Email address" required="required">
               </div>
               <div class="form-group">
                 <div class="form-row">
                   <div class="col-lg-6">
-                    <div class="form-label-group">
-                      <input type="password" id="account_password" name="account_password" class="form-control" placeholder="Password" required="required">
-                      <label for="account_password">Password</label>
-                    </div>
+                    <input type="password" id="account_password" name="account_password" class="form-control" placeholder="Password" required="required">
                   </div>
                   <div class="col-lg-6">
-                    <div class="form-label-group">
-                      <input type="password" id="account_password_confirmation" name="account_password_confirmation" class="form-control" placeholder="Confirm password" required="required">
-                      <label for="account_password_confirmation">Confirm password</label>
-                    </div>
+                    <input type="password" id="account_password_confirmation" name="account_password_confirmation" class="form-control" placeholder="Confirm password" required="required">
                   </div>
                 </div>
               </div>

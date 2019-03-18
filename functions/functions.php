@@ -31,6 +31,27 @@ function generateToken() {
     $token = $_SESSION['token'] = md5(uniqid(mt_rand(), true));
     return $token;
 }
+
+function displayErrorAlert($alert) {
+    echo "
+    <div class=\"alert alert-danger alert-dismissible fade show\" role=\"alert\">
+        <strong>Error:</strong><br> {$alert}
+        <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">
+            <span aria-hidden=\"true\">&times;</span>
+        </button>
+    </div>";    
+}
+
+function displaySuccessAlert($alert) {
+    echo "
+    <div class=\"alert alert-success alert-dismissible fade show\" role=\"alert\">
+        <strong>Success:</strong><br> {$alert}
+        <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">
+            <span aria-hidden=\"true\">&times;</span>
+        </button>
+    </div>";    
+}
+
 // ------------------------------------------------------------------
 // ------------------------------------------------------------------
 
@@ -416,7 +437,81 @@ function login() {
     }
 }
 
+// ------------------------------------------------------------------
+// Registration functions
+// ------------------------------------------------------------------
 
+// Check if email already registered
+function emailExists($email) {
+    $email = escape($email);
+    $query = "SELECT account_id FROM accounts WHERE account_email = '$email'";
+    $result = query($query);
+    if(rowCount($result) == 1){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// Validate all user input in Register form
+function validateUserReg(){
+    $min = 2;
+    $max = 255;
+    
+    if($_SERVER['REQUEST_METHOD'] == "POST"){
+        $account_first_name             = clean($_POST['account_first_name']);
+        $account_last_name              = clean($_POST['account_last_name']);
+        $account_email                  = clean($_POST['account_email']);
+        $account_password               = clean($_POST['account_password']);
+        $account_password_confirmation  = clean($_POST['account_password_confirmation']);
+
+        if(strlen($account_first_name) < $min || strlen($account_first_name) > $max){
+            $errors[] = "First name must be between 2 and 255 characters";
+        }
+    
+        if(strlen($account_last_name) < $min || strlen($account_first_name) > $max){
+            $errors[] = "Last name must be between 2 and 255 characters";
+        }
+    
+        if($account_password !== $account_password_confirmation){
+            $errors[] = "Passwords don't match";
+        }
+    
+        if(emailExists($account_email)){
+            $errors[] = "$account_email is alredy registered";
+        }
+    
+        if(!empty($errors)){
+            foreach ($errors as $error) {
+                displayErrorAlert($error);
+            }
+        } else {
+            if(registerUser($account_first_name, $account_last_name, $account_email, $account_password)){
+                displaySuccessAlert("You are registered");
+            }
+        }
+    }
+}
+
+// Register user
+function registerUser($account_first_name, $account_last_name, $account_email, $account_password) {
+    $account_first_name     = escape($account_first_name);
+    $account_last_name      = escape($account_last_name);
+    $account_email          = escape($account_email);
+    $account_password       = escape($account_password);
+
+    if(emailExists($account_email)){
+        return false;
+    } else {
+        $account_password = password_hash($account_password, PASSWORD_BCRYPT, array('cost' => 12));
+        $query = "INSERT INTO accounts (account_first_name, account_last_name, account_email, account_password, account_status) VALUES ('{$account_first_name}','{$account_last_name}','{$account_email}','{$account_password}','disabled')";
+        query($query);
+        validateQuery($query);
+        return true;
+    }
+}
+
+/*
 function register() {
     global $connection;
     if (isset($_POST['register_account'])) {
@@ -433,5 +528,6 @@ function register() {
         header("Location: ../index.php");
     }
 }
+*/
 
 ?>

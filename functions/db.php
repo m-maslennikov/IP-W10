@@ -13,7 +13,7 @@ function query($query) {
 }
 
 // Shortcut function for mysqli_real_escape_string()
-function escapeSql($string) {
+function escape($string) {
     global $connection;
     return mysqli_real_escape_string($connection,$string);
 }
