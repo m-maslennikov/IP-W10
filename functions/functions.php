@@ -538,9 +538,6 @@ function loginUser($email, $password) {
         $account_password = $row['account_password'];
         $account_type = $row['account_type'];
         if(password_verify($password, $account_password)){
-            if($remember_me == "on"){
-                setcookie('id', $account_id, time() + 3600);
-            }
             $_SESSION['account_email'] = $account_email;
             $_SESSION['account_type'] = $account_type;
             $_SESSION['account_id'] = $account_id;
