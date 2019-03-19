@@ -1,7 +1,7 @@
 <?php
 
 // ------------------------------------------------------------------
-// General helper functions
+// General helper functions START
 // ------------------------------------------------------------------
 
 function clean($string) {
@@ -65,87 +65,86 @@ function sendEmail($email, $subject, $msg, $headers) {
 }
 
 // ------------------------------------------------------------------
+// General helper functions END
+// ------------------------------------------------------------------
+//
+// TO DO: WRITE COMMENTS / REFACTOR.
+//
+// ------------------------------------------------------------------
+// ADMIN section functions START
 // ------------------------------------------------------------------
 
-
-// TO DO: WRITE COMMENTS / REFACTOR.
-
+// Function for adding new car categories
 function insertCategory() {
-    global $connection;
     if (isset($_POST['add_category'])) {
         $category_name = $_POST['category_name'];
         $category_daily_price = $_POST['category_daily_price'];
         $category_description = $_POST['category_description'];
-        if (empty($category_name) || empty($category_daily_price)) {
-            echo "Name and Daily Price should not be empty";
+        if (empty($category_name) && empty($category_daily_price)) {
+            displayErrorAlert("Name and Daily Price should not be empty");
         } else {
-            $query = "INSERT INTO categories (category_name, category_daily_price, category_description) 
-                    VALUES ('{$category_name}','{$category_daily_price}','{$category_description}')";
-            $insert_category_query = mysqli_query($connection, $query);
-            validateQuery($insert_category_query);
+            $query = "INSERT INTO categories (category_name, category_daily_price, category_description) VALUES ('{$category_name}','{$category_daily_price}','{$category_description}')";
+            query($query);
             header("Location: categories.php");
         }
     }
-}
+} // EOF
 
+// Function for displaying all categories
 function displayAllCategories() {
-    global $connection;
-    $query = 'SELECT * FROM categories';
-    $select_categories = mysqli_query($connection, $query);
-    validateQuery($select_categories);
-    while($row = mysqli_fetch_assoc($select_categories)) {
+    // Get All categories from DB
+    $query = "SELECT * FROM categories";
+    $result = query($query);
+    while($row = fetchArray($result)) {
         $category_id = $row['category_id'];
         $category_name = $row['category_name'];
         $category_daily_price = $row['category_daily_price'];
         $category_description = $row['category_description'];
-        echo "<tr>";
-        echo "<td>{$category_id}</td>";
-        echo "<td>{$category_name}</td>";
-        echo "<td>{$category_daily_price}</td>";
-        echo "<td>{$category_description}</td>";
-        echo "
-            <td>
-                <a href='categories.php?edit={$category_id}' class='text-dark px-1'><i class='fas fa-pencil-alt'></i></a>
-                <a href='categories.php?delete={$category_id}' class='text-danger px-1'><i class='fas fa-trash'></i></a>
-            </td>";
-        echo "</tr>";
+        echo "<tr>
+                <td>{$category_id}</td>
+                <td>{$category_name}</td>
+                <td>{$category_daily_price}</td>
+                <td>{$category_description}</td>
+                <td>
+                    <a href='categories.php?edit={$category_id}' class='text-dark px-1'><i class='fas fa-pencil-alt'></i></a>
+                    <a href='categories.php?delete={$category_id}' class='text-danger px-1'><i class='fas fa-trash'></i></a>
+                </td>
+              </tr>";
     }
-}
+} // EOF
 
+// Function for updating car category
 function updateCategory($category_id) {
-    global $connection;
     if (isset($_POST['update_category'])) {
         $category_name = $_POST['category_name'];
         $category_daily_price = $_POST['category_daily_price'];
         $category_description = $_POST['category_description'];
         if (empty($category_name) || empty($category_daily_price)) {
-            echo "Name and Daily Price should not be empty";
+            displayErrorAlert("Name and Daily Price should not be empty");
         } else {
             $query = "UPDATE categories SET 
             category_name = '{$category_name}', 
             category_daily_price = '{$category_daily_price}', 
             category_description = '{$category_description}' 
             WHERE category_id = {$category_id}";
-            $update_category_query = mysqli_query($connection, $query);
-            validateQuery($update_category_query);
+            query($query);
             header("Location: categories.php");
         }
     }
-}
+} // EOF
 
+// Function for deleting a car category
 function deleteCategory() {
-    global $connection;
     if (isset($_GET['delete'])) {
         $category_id = $_GET['delete'];
         $query = "DELETE FROM categories WHERE category_id = {$category_id}";
-        $delete_category_query = mysqli_query($connection, $query);
-        validateQuery($delete_category_query);
+        query($query);
         header("Location: categories.php");
     }
-}
+} // EOF
 
+// Function for adding a new car
 function addCar() {
-    global $connection;
     if (isset($_POST['add_car'])) {
         $car_make = $_POST['car_make'];
         $car_model = $_POST['car_model'];
@@ -161,13 +160,12 @@ function addCar() {
         move_uploaded_file($car_image_temp, "../images/$car_image");
         $query = "INSERT INTO cars (car_make, car_model, car_colour, car_status, car_body_type, car_power, category_id, car_image, car_doors, car_seats) 
                 VALUES ('{$car_make}','{$car_model}','{$car_colour}','{$car_status}','{$car_body_type}','{$car_power}','{$category_id}','{$car_image}','{$car_doors}','{$car_seats}')";
-        $add_car_query = mysqli_query($connection, $query);
-        validateQuery($add_car_query);
-        echo "Car added. <a href='cars.php'>Go to cars</a>";
-        //header("Location: cars.php");
+        query($query);
+        displaySuccessAlert("Car added. <a href='cars.php'>Go to cars</a>");
     }
-}
+} // EOF
 
+// Function for updating car details
 function updateCar($car_id) {
     global $connection;
     if (isset($_POST['update_car'])) {
@@ -187,9 +185,8 @@ function updateCar($car_id) {
         
         if (empty($car_image)) {
             $query = "SELECT * FROM cars WHERE car_id = $car_id";
-            $select_car_image_query = mysqli_query($connection, $query);
-            validateQuery($select_car_image_query);
-            while($row = mysqli_fetch_assoc($select_car_image_query)) {
+            $result = query($query);
+            while($row = fetchArray($result)) {
                 $car_image = $row['car_image'];
             }
         }
@@ -205,65 +202,57 @@ function updateCar($car_id) {
                 car_doors = '{$car_doors}', 
                 car_seats = '{$car_seats}' 
                 WHERE car_id = {$car_id}";
-        $update_car_query = mysqli_query($connection, $query);
-        validateQuery($update_car_query);
+        query($query);
         header("Location: cars.php");
     }
-}
+} // EOF
 
+// Function for deleting a car
 function deleteCar() {
-    global $connection;
     if(isset($_GET['delete'])) {
-        global $connection;
         $car_id = $_GET['delete'];
         $query = "DELETE FROM cars WHERE car_id = {$car_id}";
-        $delete_car_query = mysqli_query($connection, $query);
-        validateQuery($delete_car_query);
+        query($query);
         header("Location: cars.php");
     }
-}
+} // EOF
 
+// Function for making a car available
 function enableCar() {
-    global $connection;
     if(isset($_GET['enable'])) {
-        global $connection;
         $car_id = $_GET['enable'];
         $query = "UPDATE cars SET car_status = 'Available' WHERE car_id = $car_id";
-        $make_enable_query = mysqli_query($connection,$query);
-        validateQuery($make_enable_query);
+        query($query);
         header("Location: cars.php");
     }
-}
+} // EOF
 
+// Function for making a car unavailable
 function disableCar() {
-    global $connection;
     if(isset($_GET['disable'])) {
-        global $connection;
         $car_id = $_GET['disable'];
         $query = "UPDATE cars SET car_status = 'Available' WHERE car_id = $car_id";
-        $make_disable_query = mysqli_query($connection,$query);
-        validateQuery($make_disable_query);
+        query($query);
         header("Location: cars.php");
     }
-}
+} // EOF
 
+// Function for adding an account from admin panel
 function addAccount() {
-    global $connection;
     if (isset($_POST['add_account'])) {
         $account_password = $_POST['account_password'];
         $account_email = $_POST['account_email'];
         $account_type = $_POST['account_type'];
         $query = "INSERT INTO accounts (account_password, account_email, account_type) 
                 VALUES ('{$account_password}','{$account_email}','{$account_type}')";
-        $add_account_query = mysqli_query($connection, $query);
-        validateQuery($add_account_query);
-        echo "User created. <a href='accounts.php'>Go to accounts</a>";
+        query($query);
+        displaySessionMessage("User created. <a href='accounts.php'>Go to accounts</a>");
         //header("Location: accounts.php");
     }
-}
+} // EOF
 
+// Function for editing an account from admin panel
 function updateAccount($account_id) {
-    global $connection;
     if (isset($_POST['update_account'])) {
         $account_password = $_POST['account_password'];
         $account_password = password_hash($account_password, PASSWORD_BCRYPT, array('cost' => 12));
@@ -277,9 +266,8 @@ function updateAccount($account_id) {
         $account_phone = $_POST['account_phone'];
         if (empty($account_password)) {
             $query = "SELECT * FROM accounts WHERE account_id = $account_id";
-            $select_account_password_query = mysqli_query($connection, $query);
-            validateQuery($select_account_password_query);
-            while($row = mysqli_fetch_assoc($select_account_password_query)) {
+            $result = query($query);
+            while($row = fetchArray($result)) {
                 $account_password = $row['account_password'];
             }
         }
@@ -294,74 +282,73 @@ function updateAccount($account_id) {
                 account_address = '{$account_address}',
                 account_phone = '{$account_phone}'
                 WHERE account_id = {$account_id}";
-        $update_account_query = mysqli_query($connection, $query);
-        validateQuery($update_account_query);
+        query($query);
         header("Location: accounts.php");
     }
-}
+} // EOF
 
+// Function for deleting an account from admin panel
 function deleteAccount() {
-    global $connection;
     if(isset($_GET['delete'])) {
-        global $connection;
         $account_id = $_GET['delete'];
         $query = "DELETE FROM accounts WHERE account_id = {$account_id}";
-        $delete_account_query = mysqli_query($connection, $query);
-        validateQuery($delete_account_query);
+        query($query);
         header("Location: accounts.php");
     }
-}
+} // EOF
 
+// Function for enabling an account from admin panel
 function enableAccount() {
-    global $connection;
     if(isset($_GET['enable'])) {
-        global $connection;
         $account_id = $_GET['enable'];
         $query = "UPDATE accounts SET account_status = 'Enabled' WHERE account_id = $account_id";
-        $make_enable_query = mysqli_query($connection,$query);
-        validateQuery($make_enable_query);
+        query($query);
         header("Location: accounts.php");
     }
-}
+} // EOF
 
+// Function for disabling an account from admin panel
 function disableAccount() {
-    global $connection;
     if(isset($_GET['disable'])) {
-        global $connection;
         $account_id = $_GET['disable'];
         $query = "UPDATE accounts SET account_status = 'Disabled' WHERE account_id = $account_id";
-        $make_disable_query = mysqli_query($connection,$query);
-        validateQuery($make_disable_query);
+        query($query);
         header("Location: accounts.php");
     }
-}
+} // EOF
 
+// Function for accepting a booking request from admin panel
 function acceptBooking() {
-    global $connection;
     if(isset($_GET['accept'])) {
-        global $connection;
         $booking_id = $_GET['accept'];
         $query = "UPDATE bookings SET booking_status = 'Accepted' WHERE booking_id = $booking_id";
-        $make_accept_query = mysqli_query($connection,$query);
-        validateQuery($make_accept_query);
+        query($query);
         header("Location: bookings.php");
     }
-}
+} // EOF
 
+// Function for rejecting a booking request from admin panel
 function rejectBooking() {
-    global $connection;
     if(isset($_GET['reject'])) {
-        global $connection;
         $booking_id = $_GET['reject'];
         $query = "UPDATE bookings SET booking_status = 'Rejected' WHERE booking_id = $booking_id";
-        $make_reject_query = mysqli_query($connection,$query);
-        validateQuery($make_reject_query);
+        query($query);
         header("Location: bookings.php");
     }
-}
+} // EOF
 
+// ------------------------------------------------------------------
+// ADMIN section functions END
+// ------------------------------------------------------------------
+//
+//
+//
+// ------------------------------------------------------------------
+// USER section functions START
+// ------------------------------------------------------------------
+
+// Function for updating user profile
 function updateProfile() {
-    global $connection;
     if (isset($_POST['update_profile'])) {
         $account_email = $_POST['account_email'];
         $account_first_name = $_POST['account_first_name'];
@@ -378,20 +365,21 @@ function updateProfile() {
                 account_address = '{$account_address}',
                 account_dob = '{$account_dob}'
                 WHERE account_id = {$account_id}";
-        $update_profile_query = mysqli_query($connection, $query);
-        validateQuery($update_profile_query);
+        query($query);
         $_SESSION['account_email'] = $account_email;
     }
-}
+} // EOF
 
+// Function for updating user password
 function updatePassword($account_id, $password){
     $password = password_hash($password, PASSWORD_BCRYPT, array('cost' => 12));
     $query = "UPDATE accounts SET account_password = '$password' WHERE account_id = '$account_id'";
     $result = query($query);
     validateQuery($result);
     displaySuccessAlert("Password has been updated.");
-}
+} // EOF
 
+// Function for validating user password before updating
 function validateUserPassword(){
     if(isset($_POST['update_password'])){
         $account_id                         = $_SESSION['account_id'];
@@ -401,7 +389,6 @@ function validateUserPassword(){
 
         if(!empty($account_password) && !empty($new_account_password) && !empty($new_account_password_confirmation)){
             // go verify current password
-
             $query = "SELECT account_password FROM accounts WHERE account_id = '$account_id'";
             $result = query($query);
             validateQuery($result);
@@ -413,6 +400,7 @@ function validateUserPassword(){
                     if($new_account_password !== $new_account_password_confirmation){
                         displayErrorAlert("New passwords don't match");
                     } else {
+                        // if everything is validated - update password
                         updatePassword($account_id, $new_account_password);
                     }
                 } else {
@@ -423,11 +411,16 @@ function validateUserPassword(){
             displayErrorAlert("Passwords should not be empty.");
         }
     }
-}
-
+} // EOF
 
 // ------------------------------------------------------------------
-// Registration functions
+// USER section functions END
+// ------------------------------------------------------------------
+//
+//
+//
+// ------------------------------------------------------------------
+// Login and Registration System functions START
 // ------------------------------------------------------------------
 
 // Check if email already registered
@@ -703,4 +696,9 @@ function resetPassword(){
         redirect('forgot-password.php');
     }
 }
+
+// ------------------------------------------------------------------
+// Login and Registration System functions START
+// ------------------------------------------------------------------
+
 ?>

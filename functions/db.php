@@ -6,10 +6,15 @@ $connection = mysqli_connect('109.106.214.69:443','week10','pass@word1','rentaca
 
 // The following functions are created to make PHP code more readable
 // ------------------------------------------------------------------
-// Shortcut function for mysqli_query()
+// Shortcut function for mysqli_query() with result validation
 function query($query) {
     global $connection;
-    return mysqli_query($connection,$query);
+    $result = mysqli_query($connection,$query);
+    if(!$result){
+        return die("QUERY FAILED. " . mysqli_error($connection));
+    } else {
+        return $result;
+    }
 }
 
 // Shortcut function for mysqli_real_escape_string()
@@ -36,6 +41,9 @@ function validateQuery($result) {
 function rowCount($result) {
     return mysqli_num_rows($result);
 }
+
+
+
 // ------------------------------------------------------------------
 
 ?>
