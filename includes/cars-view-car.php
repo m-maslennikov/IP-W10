@@ -1,7 +1,4 @@
-<?php
 
-bookCar();
-?>
     <!-- Car Details Row -->
     <div class="row">
       
@@ -18,6 +15,7 @@ bookCar();
         </ul>
         <?php if(loggedIn()): ?>
         <form action="" method="post">
+        <?php bookCar(); ?>
           <div class="form-group">
             <label for="booking_booked_start_date">Start Date</label>
             <input type="date" name="booking_booked_start_date" id="booking_booked_start_date" class="form-control">

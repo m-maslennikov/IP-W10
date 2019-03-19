@@ -25,6 +25,7 @@
               </div>
               <div class="form-group">
                 <input type="email" id="account_email" name="account_email" class="form-control" placeholder="Email address" required="required">
+                <span id="email-badge" class="badge badge-danger"></span>
               </div>
               <div class="form-group">
                 <div class="form-row">
@@ -48,7 +49,7 @@
     </div>
     
   </div>
-
+  
 <?php 
 // Include all common scripts and close BODY tag.
 include "includes/_body-end.php"; 

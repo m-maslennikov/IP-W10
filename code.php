@@ -11,7 +11,6 @@
           <div class="card-body">
           <?php displaySessionMessage(); ?>
           <?php validateCode(); ?>
-          
             <div class="text-center mb-4">
               <h4>Enter Validation Code</h4>
               <p>Enter your validation code which was sent to your email to reset your password.</p>

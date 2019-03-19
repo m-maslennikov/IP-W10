@@ -40,37 +40,24 @@
     <!-- In order to set the email address and subject line for the contact form go to the bin/contact_me.php file. -->
     <div class="row">
       <div class="col-lg-8 mb-4">
+      <?php if(loggedIn()) : ?>
         <h3>Send us a Feedback</h3>
-        <form name="sentMessage" id="contactForm" novalidate>
-          <div class="control-group form-group">
-            <div class="controls">
-              <label>Full Name:</label>
-              <input type="text" class="form-control" id="name" required data-validation-required-message="Please enter your name.">
-              <p class="help-block"></p>
-            </div>
+        <form action="" method="post">
+        <div><?php sendFeedback(); ?></div><!-- For success/fail messages -->
+        <div class="form-group">
+              <label>Subject:</label>
+              <input type="text" name="feedback_subject" class="form-control" id="feedback_subject" required>
           </div>
-          <div class="control-group form-group">
-            <div class="controls">
-              <label>Phone Number:</label>
-              <input type="tel" class="form-control" id="phone" required data-validation-required-message="Please enter your phone number.">
-            </div>
-          </div>
-          <div class="control-group form-group">
-            <div class="controls">
-              <label>Email Address:</label>
-              <input type="email" class="form-control" id="email" required data-validation-required-message="Please enter your email address.">
-            </div>
-          </div>
-          <div class="control-group form-group">
-            <div class="controls">
+          <div class="form-group">
               <label>Message:</label>
-              <textarea rows="10" cols="100" class="form-control" id="message" required data-validation-required-message="Please enter your message" maxlength="999" style="resize:none"></textarea>
-            </div>
+              <textarea name="feedback_text" rows="10" cols="100" class="form-control" id="feedback_text" maxlength="999" style="resize:none" required></textarea>
           </div>
-          <div id="success"></div>
-          <!-- For success/fail messages -->
-          <button type="submit" class="btn btn-primary" id="send_feedback">Send Message</button>
+          
+          <button type="submit" class="btn btn-primary" id="send_feedback" name="send_feedback">Send Message</button>
         </form>
+        <?php else : ?>
+        <h3>Please log in to send a feedback</h3>
+        <?php endif ?>
       </div>
 
     </div>

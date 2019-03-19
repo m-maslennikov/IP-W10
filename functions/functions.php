@@ -416,6 +416,23 @@ function validateUserPassword(){
     }
 } // EOF
 
+// Function for sending feedback to admin/staff
+function sendFeedback(){
+    if(isset($_POST['send_feedback'])){
+        $feedback_subject = escape(clean($_POST['feedback_subject']));
+        $feedback_text = escape(clean($_POST['feedback_text']));
+        $account_id = $_SESSION['account_id'];
+        if(strlen($feedback_subject) >= 5 || strlen($feedback_text) >= 20){
+            $query = "INSERT INTO feedbacks (feedback_subject, feedback_text, account_id) 
+                    VALUES ('{$feedback_subject}','{$feedback_text}','{$account_id}')";
+            query($query);
+            displaySuccessAlert("Your feedback has been sent");
+        } else {
+            displayErrorAlert("Please, provide more information");
+        }
+    }
+}
+
 // ------------------------------------------------------------------
 // USER section functions END
 // ------------------------------------------------------------------
@@ -712,6 +729,7 @@ function resetPassword(){
     }
 }
 
+
 // ------------------------------------------------------------------
 // Login and Registration System functions START
 // ------------------------------------------------------------------
@@ -826,6 +844,7 @@ function bookCar(){
         $query = "INSERT INTO bookings (booking_booked_start_date, booking_booked_end_date, account_id, car_id) 
                       VALUES ('{$booking_booked_start_date}','{$booking_booked_end_date}','{$account_id}','{$car_id}')";
         query($query);
+        displaySuccessAlert("Yor request has been sent. Please check your email for further actions");
     }
 } // EOF
 
