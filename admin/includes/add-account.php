@@ -13,9 +13,9 @@
     <div class="form-group">
         <label for="account_type">Account Type</label>
         <select name="account_type" class="form-control" id="account_type">
-            <option value="Customer">Customer</option>
-            <option value="Staff">Staff</option>
-            <option value="Admin">Admin</option>
+            <option value="customer">Customer</option>
+            <option value="staff">Staff</option>
+            <option value="admin">Admin</option>
         </select>
     </div>
     <div class="form-group">

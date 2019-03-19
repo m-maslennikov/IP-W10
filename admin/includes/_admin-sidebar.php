@@ -8,49 +8,58 @@
         </a>
       </li>
 
-      <li class="nav-item"> <!--Categories-->
-        <a class="nav-link" href="categories.php">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Categories</span>
-        </a>
-      </li>
-      
       <li class="nav-item dropdown"> <!--Cars Menu-->
         <a class="nav-link dropdown-toggle" href="" id="carsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-fw fa-folder"></i>
+          <i class="fas fa-car"></i>
           <span>Cars</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="carsDropdown">
           <h6 class="dropdown-header">Actions:</h6>
-          <a class="dropdown-item" href="cars.php?action=add">Add Cars</a>
-          <a class="dropdown-item" href="cars.php">View All Cars</a>
+          <a class="dropdown-item" href="cars.php?action=add">Add a car</a>
+          <a class="dropdown-item" href="cars.php">View all cars</a>
         </div>
       </li>
-
+      <?php if(isAdmin()) : ?>
       <li class="nav-item dropdown"> <!--Accounts Menu-->
         <a class="nav-link dropdown-toggle" href="#" id="accountsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-fw fa-folder"></i>
+          <i class="far fa-address-book"></i>
           <span>Accounts</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="accountsDropdown">
           <h6 class="dropdown-header">Actions:</h6>
-          <a class="dropdown-item" href="accounts.php?action=add">Add Account</a>
-          <a class="dropdown-item" href="accounts.php">View All Accounts</a>
+          <a class="dropdown-item" href="accounts.php?action=add">Add an account</a>
+          <a class="dropdown-item" href="accounts.php">View all accounts</a>
         </div>
       </li>
+      <?php endif ?>
 
-      <li class="nav-item dropdown"> <!--Bookings Menu-->
-        <a class="nav-link dropdown-toggle" href="#" id="bookingsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-fw fa-folder"></i>
+      <li class="nav-item"> <!--Bookings-->
+        <a class="nav-link" href="bookings.php">
+          <i class="far fa-calendar-alt"></i>
           <span>Bookings</span>
         </a>
-        <div class="dropdown-menu" aria-labelledby="bookingsDropdown">
-          <h6 class="dropdown-header">Actions:</h6>
-          <a class="dropdown-item" href="bookings.php?action=add">Add Booking</a>
-          <a class="dropdown-item" href="bookings.php">View All bookings</a>
-        </div>
       </li>
 
+      <li class="nav-item"> <!--Categories-->
+        <a class="nav-link" href="categories.php">
+          <i class="fas fa-bars"></i>
+          <span>Categories</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="tables.html">
+          <i class="far fa-comment"></i>
+          <span>Feedbacks</span></a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="../index.php">
+          <i class="fas fa-home"></i>
+          <span>Website</span>
+        </a>
+      </li>
+      
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-fw fa-folder"></i>
@@ -67,20 +76,5 @@
           <a class="dropdown-item active" href="blank.html">Blank Page</a>
         </div>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="charts.html">
-          <i class="fas fa-fw fa-chart-area"></i>
-          <span>Charts</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="tables.html">
-          <i class="fas fa-fw fa-table"></i>
-          <span>Tables</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="../index.php">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Website</span>
-        </a>
-      </li>
+      
     </ul>

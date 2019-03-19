@@ -241,6 +241,7 @@ function disableCar() {
 function addAccount() {
     if (isset($_POST['add_account'])) {
         $account_password = $_POST['account_password'];
+        $account_password = password_hash($account_password, PASSWORD_BCRYPT, array('cost' => 12));
         $account_email = $_POST['account_email'];
         $account_type = $_POST['account_type'];
         $query = "INSERT INTO accounts (account_password, account_email, account_type) 
@@ -255,7 +256,9 @@ function addAccount() {
 function updateAccount($account_id) {
     if (isset($_POST['update_account'])) {
         $account_password = $_POST['account_password'];
-        $account_password = password_hash($account_password, PASSWORD_BCRYPT, array('cost' => 12));
+        if(!empty($account_password)) {
+            $account_password = password_hash($account_password, PASSWORD_BCRYPT, array('cost' => 12));
+        }
         $account_email = $_POST['account_email'];
         $account_type = $_POST['account_type'];
         $account_status = $_POST['account_status'];
@@ -301,7 +304,7 @@ function deleteAccount() {
 function enableAccount() {
     if(isset($_GET['enable'])) {
         $account_id = $_GET['enable'];
-        $query = "UPDATE accounts SET account_status = 'Enabled' WHERE account_id = $account_id";
+        $query = "UPDATE accounts SET account_status = 'enabled' WHERE account_id = $account_id";
         query($query);
         header("Location: accounts.php");
     }
@@ -311,7 +314,7 @@ function enableAccount() {
 function disableAccount() {
     if(isset($_GET['disable'])) {
         $account_id = $_GET['disable'];
-        $query = "UPDATE accounts SET account_status = 'Disabled' WHERE account_id = $account_id";
+        $query = "UPDATE accounts SET account_status = 'disabled' WHERE account_id = $account_id";
         query($query);
         header("Location: accounts.php");
     }
@@ -558,6 +561,26 @@ function loggedIn(){
         return false;
     }
 }
+
+// Check user roles
+// ADMIN
+function isAdmin(){
+    if(isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'admin'){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// STAFF
+function isStaff(){
+    if(isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'staff'){
+        return true;
+    } else {
+        return false;
+    }
+}
+
 
 // Validate Login form
 function validateUserLogin(){

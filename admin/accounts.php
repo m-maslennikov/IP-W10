@@ -1,4 +1,11 @@
 <?php include "includes/_admin-head.php"; ?>
+
+<?php 
+if(!isAdmin()) {
+    redirect("index.php");
+}  
+?>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12">

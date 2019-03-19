@@ -7,11 +7,8 @@ include "../functions/init.php";
 
 <?php 
 // Check for staff or admin
-if (isset($_SESSION['account_type'])) {
-    $account_type = $_SESSION['account_type'];
-    if ($account_type == 'customer' ) {
-        header("Location: ../");
-    }
+if(!isAdmin() && !isStaff()) {
+    redirect("../");
 }
 ?>
 

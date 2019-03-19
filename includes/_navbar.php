@@ -17,6 +17,9 @@
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownPortfolio">
           <a class="dropdown-item" href="profile.php">My Profile</a>
+          <?php if(isAdmin() || isStaff()) : ?>
+          <a class="dropdown-item" href="admin">Admin/Staff portal</a>
+          <?php endif ?>
           <a class="dropdown-item" href="logout.php">Logout</a>
         </div>
       </li>

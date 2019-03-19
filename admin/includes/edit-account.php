@@ -34,22 +34,22 @@ updateAccount($account_id);
         <select name="account_type" class="form-control" id="account_type">
             <?php
             switch ($account_type) {
-                case 'Staff':
-                echo "<option value='Customer'>Customer</option>";
-                echo "<option value='Staff' selected='selected'>Staff</option>";
-                echo "<option value='Admin'>Admin</option>";
+                case 'staff':
+                echo "<option value='customer'>Customer</option>";
+                echo "<option value='staff' selected='selected'>Staff</option>";
+                echo "<option value='admin'>Admin</option>";
                 break;
                 
-                case 'Admin':
-                echo "<option value='Customer'>Customer</option>";
-                echo "<option value='Staff'>Staff</option>";
-                echo "<option value='Admin' selected='selected'>Admin</option>";
+                case 'admin':
+                echo "<option value='customer'>Customer</option>";
+                echo "<option value='staff'>Staff</option>";
+                echo "<option value='admin' selected='selected'>Admin</option>";
                 break;
                 
                 default:
-                echo "<option value='Customer' selected='selected'>Customer</option>";
-                echo "<option value='Staff'>Staff</option>";
-                echo "<option value='Admin'>Admin</option>";
+                echo "<option value='customer' selected='selected'>Customer</option>";
+                echo "<option value='staff'>Staff</option>";
+                echo "<option value='admin'>Admin</option>";
                 break;
             }
             ?>
