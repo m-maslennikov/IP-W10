@@ -68,7 +68,7 @@ function sendEmail($email, $subject, $msg, $headers) {
 // General helper functions END
 // ------------------------------------------------------------------
 //
-// TO DO: WRITE COMMENTS / REFACTOR.
+// TO DO: WRITE COMMENTS / ESCAPE ALL SQL DATA / REFACTOR  
 //
 // ------------------------------------------------------------------
 // ADMIN section functions START
@@ -241,7 +241,7 @@ function disableCar() {
 function addAccount() {
     if (isset($_POST['add_account'])) {
         $account_password = $_POST['account_password'];
-        $account_password = password_hash($account_password, PASSWORD_BCRYPT, array('cost' => 12));
+        $account_password = password_hash($account_password, PASSWORD_BCRYPT, array('cost' => 10));
         $account_email = $_POST['account_email'];
         $account_type = $_POST['account_type'];
         $query = "INSERT INTO accounts (account_password, account_email, account_type) 
@@ -257,7 +257,7 @@ function updateAccount($account_id) {
     if (isset($_POST['update_account'])) {
         $account_password = $_POST['account_password'];
         if(!empty($account_password)) {
-            $account_password = password_hash($account_password, PASSWORD_BCRYPT, array('cost' => 12));
+            $account_password = password_hash($account_password, PASSWORD_BCRYPT, array('cost' => 10));
         }
         $account_email = $_POST['account_email'];
         $account_type = $_POST['account_type'];
@@ -375,7 +375,7 @@ function updateProfile() {
 
 // Function for updating user password
 function updatePassword($account_id, $password){
-    $password = password_hash($password, PASSWORD_BCRYPT, array('cost' => 12));
+    $password = password_hash($password, PASSWORD_BCRYPT, array('cost' => 10));
     $query = "UPDATE accounts SET account_password = '$password' WHERE account_id = '$account_id'";
     $result = query($query);
     validateQuery($result);
@@ -448,7 +448,7 @@ function registerUser($account_first_name, $account_last_name, $account_email, $
     if(emailExists($account_email)){
         return false;
     } else {
-        $account_password = password_hash($account_password, PASSWORD_BCRYPT, array('cost' => 12));
+        $account_password = password_hash($account_password, PASSWORD_BCRYPT, array('cost' => 10));
         $account_validation_code = md5($account_email . microtime());
         $query = "INSERT INTO accounts (account_first_name, account_last_name, account_email, account_password, account_status, account_validation_code) VALUES ('{$account_first_name}','{$account_last_name}','{$account_email}','{$account_password}','disabled','{$account_validation_code}')";
         query($query);
@@ -694,7 +694,7 @@ function resetPassword(){
                     $account_password_confirmation = escape(clean($_POST['account_password_confirmation']));
                     $account_email = escape(clean($_GET['email']));
                     if($account_password === $account_password_confirmation){
-                        $account_password = password_hash($account_password, PASSWORD_BCRYPT, array('cost' => 12));
+                        $account_password = password_hash($account_password, PASSWORD_BCRYPT, array('cost' => 10));
                         $query = "UPDATE accounts SET account_password = '$account_password', account_validation_code = '0' WHERE account_email = '$account_email'";
                         $result = query($query);
                         validateQuery($result);
@@ -714,6 +714,125 @@ function resetPassword(){
 
 // ------------------------------------------------------------------
 // Login and Registration System functions START
+// ------------------------------------------------------------------
+//
+//
+//
+// ------------------------------------------------------------------
+// Content functions START
+// ------------------------------------------------------------------
+
+// Function for displaying all car categories
+function showAllCategories(){
+    $query = "SELECT * FROM categories";
+    $result = query($query);
+    while($row = fetchArray($result)) {
+        $category_id = $row['category_id'];
+        $category_name = $row['category_name'];
+        $category_description = $row['category_description'];
+        $category_daily_price = $row['category_daily_price'];
+        echo "<div class='row'>";
+            echo "<div class='col-md-7'>";
+                echo "<a href='cars.php?action=view_category&category_id=$category_id'>";
+                    echo "<img class='img-fluid rounded mb-3 mb-md-0' src='http://placehold.it/700x300' alt=''>";
+                echo "</a>";
+            echo "</div>";
+            echo "<div class='col-md-5'>";
+                echo "<h3>$category_name</h3>";
+                echo "<p>$category_description</p>";
+                echo "<a class='btn btn-primary' href='cars.php?action=view_category&category_id=$category_id'>View More<span class='glyphicon glyphicon-chevron-right'></span></a>";
+            echo "</div>";
+        echo "</div>";
+        echo "<hr>";
+    }
+} // EOF
+
+// Function for displaying all cars of selected category
+// NEEDS REFACTORING
+function showAllCars(){
+    if(isset($_GET['category_id'])) {
+        $category_id = $_GET['category_id'];
+        $query = "SELECT * FROM cars WHERE category_id = $category_id";
+        $result = query($query);
+        while($row = mysqli_fetch_assoc($result)) {
+            $car_id = $row['car_id'];
+            $car_make = $row['car_make'];
+            $car_model = $row['car_model'];
+            $car_colour = $row['car_colour'];
+            $car_status = $row['car_status'];
+            $car_body_type = $row['car_body_type'];
+            $car_power = $row['car_power'];
+            $category_id = $row['category_id'];
+            $car_image = $row['car_image'];
+            $car_doors = $row['car_doors'];
+            $car_seats = $row['car_seats'];
+    
+            // Redner All cars in this category
+            echo "<div class='col-lg-4 col-sm-6 portfolio-item'>";
+                echo "<div class='card h-100'>";
+                    echo "<a href='cars.php?action=view_car&car_id=$car_id'><img class='card-img-top' src='http://placehold.it/700x400' alt=''></a>";
+                    echo "<div class='card-body'>";
+                        echo "<h4 class='card-title'>";
+                            echo "<a href='cars.php?action=view_car&car_id=$car_id' class='text-dark'>$car_make $car_model</a><span class='badge'><i class='fas fa-tag'></i> $category_id</span>";
+                        echo "</h4>";
+                        echo "<h5>$car_body_type</h5>";
+                    echo "</div>";
+                    echo "<div class='card-footer'>";
+                        echo "<a class='btn btn-outline-dark m-1' href='cars.php?action=view_car&car_id=$car_id'>View Details</a>";
+                    echo "</div>";
+                echo "</div>";
+            echo "</div>";
+        }
+    }
+} // EOF
+
+
+// Function for retrieving specific cars
+// NEEDS REFACTORING
+function showCar(){
+    if(isset($_GET['car_id'])) {
+        $car_id = $_GET['car_id'];
+        $query = "SELECT * FROM cars WHERE car_id = $car_id";
+        $result = query($query);
+        while($row = fetchArray($result)) {
+            $car_id = $row['car_id'];
+            $car_make = $row['car_make'];
+            $car_model = $row['car_model'];
+            $car_colour = $row['car_colour'];
+            $car_status = $row['car_status'];
+            $car_body_type = $row['car_body_type'];
+            $car_power = $row['car_power'];
+            $category_id = $row['category_id'];
+            $car_image = $row['car_image'];
+            $car_doors = $row['car_doors'];
+            $car_seats = $row['car_seats'];
+
+            echo "  <li>$car_colour</li>
+                    <li>$car_body_type</li>
+                    <li>$car_power</li>
+                    <li>$car_doors</li>
+                    <li>$car_seats</li> ";
+        }
+    }
+} // EOF
+
+// Function for making a booking of specific car
+function bookCar(){
+    if(isset($_POST['book'])) {
+        $booking_booked_start_date = $_POST['booking_booked_start_date'];
+        $booking_booked_end_date = $_POST['booking_booked_end_date'];
+        $account_id = $_SESSION['account_id'];
+        $car_id = $_POST['car_id'];
+        $query = "INSERT INTO bookings (booking_booked_start_date, booking_booked_end_date, account_id, car_id) 
+                      VALUES ('{$booking_booked_start_date}','{$booking_booked_end_date}','{$account_id}','{$car_id}')";
+        query($query);
+    }
+} // EOF
+
+
+
+// ------------------------------------------------------------------
+// Content functions END
 // ------------------------------------------------------------------
 
 ?>

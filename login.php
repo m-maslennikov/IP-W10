@@ -9,8 +9,14 @@
           <div class="card-header">Login</div>
           <div class="card-body">
           <?php displaySessionMessage(); ?>
+          <?php
+          if(loggedIn()) {
+            setSessionMessage("Welcome!");
+            redirect("index.php");
+          }
+          ?>
           <?php validateUserLogin(); ?>
-          
+
             <form action="" method="post">
               <div class="form-group">
                 <input type="email" id="account_email" name="account_email" class="form-control" placeholder="Email address" required="required" autofocus="autofocus">

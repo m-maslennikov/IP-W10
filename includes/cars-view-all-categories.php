@@ -1,27 +1,4 @@
-<?php
-$query = "SELECT * FROM categories";
-$select_all_categories_query = mysqli_query($connection, $query);
-validateQuery($select_all_categories_query);
-while($row = mysqli_fetch_assoc($select_all_categories_query)) {
-    $category_id = $row['category_id'];
-    $category_name = $row['category_name'];
-    $category_description = $row['category_description'];
-    $category_daily_price = $row['category_daily_price'];
-    echo "<div class='row'>";
-        echo "<div class='col-md-7'>";
-            echo "<a href='cars.php?action=view_category&category_id=$category_id'>";
-                echo "<img class='img-fluid rounded mb-3 mb-md-0' src='http://placehold.it/700x300' alt=''>";
-            echo "</a>";
-        echo "</div>";
-        echo "<div class='col-md-5'>";
-            echo "<h3>$category_name</h3>";
-            echo "<p>$category_description</p>";
-            echo "<a class='btn btn-primary' href='cars.php?action=view_category&category_id=$category_id'>View More<span class='glyphicon glyphicon-chevron-right'></span></a>";
-        echo "</div>";
-    echo "</div>";
-    echo "<hr>";
-}
-?>
+<?php showAllCategories(); ?>
 
 <!-- Pagination -->
 <ul class="pagination justify-content-center">
