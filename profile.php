@@ -122,16 +122,7 @@ if(isset($_SESSION['account_email'])) {
             </div>
           </div>
         </form>
-
-
       </div>
-
-
-        
-
-
-
-
   </div>
 </div>
 <hr>

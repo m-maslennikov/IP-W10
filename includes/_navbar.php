@@ -7,7 +7,7 @@
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav mx-auto">
         <li class="nav-item"><a class="nav-link" href="cars.php">Vehicles</a></li>  
-        <li class="nav-item"><a class="nav-link" href="contact.php">Contact us</a></li>
+        <li class="nav-item"><a class="nav-link" href="contact.php">Contact & Feedback</a></li>
       </ul>
       <ul class="nav navbar-nav">
       <?php  if (isset($_SESSION['account_email'])) : ?>

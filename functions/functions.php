@@ -527,8 +527,8 @@ function activateAccount() {
 }
 
 // Login user
-function loginUser($email, $password, $remember_me) {
-    $query = "SELECT account_id, account_email, account_password, account_type FROM accounts WHERE account_email = '$email'";
+function loginUser($email, $password) {
+    $query = "SELECT account_id, account_email, account_password, account_type FROM accounts WHERE account_email = '$email' AND account_status = 'enabled'";
     $result = query($query);
     validateQuery($result);
     if(rowCount($result) == 1) {
@@ -539,7 +539,7 @@ function loginUser($email, $password, $remember_me) {
         $account_type = $row['account_type'];
         if(password_verify($password, $account_password)){
             if($remember_me == "on"){
-                setcookie('email', $email, time() + 3600);
+                setcookie('id', $account_id, time() + 3600);
             }
             $_SESSION['account_email'] = $account_email;
             $_SESSION['account_type'] = $account_type;
@@ -555,7 +555,7 @@ function loginUser($email, $password, $remember_me) {
 
 // Check if user is logged in
 function loggedIn(){
-    if(isset($_SESSION['account_email']) || isset($_COOKIE['email'])){
+    if(isset($_SESSION['account_id'])){
         return true;
     } else {
         return false;
@@ -574,13 +574,8 @@ function validateUserLogin(){
             $response = json_decode($request);
             // If Captcha is ok - go check credentials and login
             if($response->success){
-                $account_email = escape(clean($_POST['account_email']));
-                $account_password = escape(clean($_POST['account_password']));
-                if(empty($_POST['remember_me'])){
-                    $remember_me = "off";
-                } else {
-                    $remember_me = $_POST['remember_me'];
-                }
+                $account_email      = escape(clean($_POST['account_email']));
+                $account_password   = escape(clean($_POST['account_password']));
 
                 if(empty($account_email)) {
                     $errors[] = "Email field can not be empty";
@@ -595,10 +590,10 @@ function validateUserLogin(){
                         displayErrorAlert($error);
                     }
                 } else {
-                    if(loginUser($account_email,$account_password, $remember_me)){
+                    if(loginUser($account_email, $account_password)){
                         redirect("admin");
                     } else {
-                        displayErrorAlert("Your credentials are incorrect");
+                        displayErrorAlert("We can not log you in. <br> Possible causes: <br> 1. Incorrect credetials <br> 2. Account is not activated");
                     }
                 }
             }

@@ -7,7 +7,11 @@
 <ul class="navbar-nav  ml-md-auto">
   <li class="nav-item dropdown no-arrow">
     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <?php echo $_SESSION['account_email']; ?>
+      <?php 
+      if(loggedIn()){
+        echo $_SESSION['account_email'];
+      } else {echo "go log in";}
+      ?>
       <i class="fas fa-user-circle fa-fw"></i>
     </a>
     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
