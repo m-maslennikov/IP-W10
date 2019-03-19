@@ -1,4 +1,11 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
+
+require 'phpmailer/Exception.php';
+require 'phpmailer/PHPMailer.php';
+require 'phpmailer/SMTP.php';
 
 // ------------------------------------------------------------------
 // General helper functions START
@@ -324,8 +331,18 @@ function disableAccount() {
 function acceptBooking() {
     if(isset($_GET['accept'])) {
         $booking_id = $_GET['accept'];
+        $query = "SELECT a.account_email, b.booking_id
+                    FROM bookings AS b
+                    INNER JOIN accounts AS a ON b.account_id=a.account_id
+                    WHERE b.booking_id = $booking_id";
+        $result = query($query);
+        $row = fetchArray($result);
+        $account_email = $row['account_email'];
         $query = "UPDATE bookings SET booking_status = 'Accepted' WHERE booking_id = $booking_id";
         query($query);
+        $subject = "Payment information";
+        $message = "Your booking is confirmed. You may pay by cash or credit card in our office.";
+        sendMail($account_email, $account_email, $subject, $message);
         header("Location: bookings.php");
     }
 } // EOF
@@ -336,6 +353,7 @@ function rejectBooking() {
         $booking_id = $_GET['reject'];
         $query = "UPDATE bookings SET booking_status = 'Rejected' WHERE booking_id = $booking_id";
         query($query);
+        sendMail();
         header("Location: bookings.php");
     }
 } // EOF
@@ -474,10 +492,7 @@ function registerUser($account_first_name, $account_last_name, $account_email, $
         $subject = "Activate Account";
         $message = "Please click the following link to activate account: 
         http://localhost/ip-w10/activate.php?email=$account_email&code=$account_validation_code";
-        $headers = "From: noreply@rentacar.com";
-
-        sendEmail($email, $subject, $message, $headers);
-
+        sendMail($account_email, $account_email, $subject, $message);
         return true;
     }
 }
@@ -656,8 +671,7 @@ function recoverPassword(){
                 $message = "Your validation code is: $account_validation_code
                 Click the following link to reset your password: 
                 http://localhost/ip-w10/code.php?email=$account_email&code=$account_validation_code";
-                $headers = "From: noreply@rentacar.com";
-                //sendEmail($account_email, $subject, $message, $headers);
+                sendMail($account_email, $account_email, $subject, $message);
                 displaySuccessAlert("Your validation code is: $account_validation_code
                 Click the following link to reset your password: 
                 http://localhost/ip-w10/code.php?email=$account_email&code=$account_validation_code");
@@ -840,18 +854,51 @@ function bookCar(){
         $booking_booked_start_date = $_POST['booking_booked_start_date'];
         $booking_booked_end_date = $_POST['booking_booked_end_date'];
         $account_id = $_SESSION['account_id'];
+        $account_email = $_SESSION['account_email'];
         $car_id = $_POST['car_id'];
         $query = "INSERT INTO bookings (booking_booked_start_date, booking_booked_end_date, account_id, car_id) 
                       VALUES ('{$booking_booked_start_date}','{$booking_booked_end_date}','{$account_id}','{$car_id}')";
         query($query);
+        sendMail($account_email,$account_email,"Rent-a-Car Booking Confirmation","Your booking has been received. <br> Once it approved we will send you an email with payment methods.");
         displaySuccessAlert("Yor request has been sent. Please check your email for further actions");
     }
 } // EOF
 
-
+// Function for sending mail via PHPMailer class
+function sendMail($emailTo, $emailToName, $subject, $message){
+    $mail = new PHPMailer;
+    $mail->isSMTP(); 
+    $mail->SMTPDebug = 0; // 0 = off (for production use) - 1 = client messages - 2 = client and server messages
+    $mail->Host = gethostbyname('smtp.7wolf.org'); // use $mail->Host = gethostbyname('smtp.gmail.com'); // if your network does not support SMTP over IPv6
+    $mail->Port = 25; // TLS only
+    
+    $mail->SMTPSecure = false;
+    $mail->SMTPAutoTLS = false;
+    //$mail->SMTPSecure = 'tls'; // ssl is depracated
+    $mail->SMTPAuth = true;
+    $mail->Username = "7wolf\\noreply";
+    $mail->Password = "123qweASD";
+    $mail->setFrom("noreply@7wolf.org", "noreply");
+    $mail->addAddress($emailTo, $emailToName);
+    $mail->Subject = $subject;
+    $mail->msgHTML($message); //$mail->msgHTML(file_get_contents('contents.html'), __DIR__); //Read an HTML message body from an external file, convert referenced images to embedded,
+    $mail->AltBody = 'HTML messaging not supported';
+    // $mail->addAttachment('images/phpmailer_mini.png'); //Attach an image file
+    
+    if(!$mail->send()){
+        echo "Mailer Error: " . $mail->ErrorInfo;
+    }else{
+        echo "Message sent!";
+    }
+} // EOF
 
 // ------------------------------------------------------------------
 // Content functions END
 // ------------------------------------------------------------------
+
+
+////////////////////////////MAIL///////////////////////////////////////
+
+
 
 ?>
