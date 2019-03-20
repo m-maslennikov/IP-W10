@@ -630,7 +630,7 @@ function registerUser($account_first_name, $account_last_name, $account_email, $
         validateQuery($query);
 
         $subject = "Activate Account";
-        $message = "Please click the following link to activate account: 
+        $message = "Please click the following link to activate account:<br>
         https://sdi2.herokuapp.com/activate.php?email=$account_email&code=$account_validation_code";
         sendMail($account_email, $account_email, $subject, $message);
         return true;
@@ -671,7 +671,7 @@ function validateUserReg(){
             }
         } else {
             if(registerUser($account_first_name, $account_last_name, $account_email, $account_password)){
-                setSessionMessage("You have registered. Please check your email and activate your account.");
+                setSessionMessage("You have been registered. Please check your email and activate your account.");
                 redirect("login.php");
             }
         }
@@ -808,13 +808,10 @@ function recoverPassword(){
                 $result = query($query);
                 validateQuery($result);
                 $subject = "Recover Password";
-                $message = "Your validation code is: $account_validation_code
-                Click the following link to reset your password: 
+                $message = "Your validation code is:<br>$account_validation_code
+                <br>Please enter this code on this page:<br> 
                 https://sdi2.herokuapp.com/code.php?email=$account_email&code=$account_validation_code";
                 sendMail($account_email, $account_email, $subject, $message);
-                displaySuccessAlert("Your validation code is: $account_validation_code
-                Click the following link to reset your password: 
-                https://sdi2.herokuapp.com/code.php?email=$account_email&code=$account_validation_code");
             } else {
                 displayErrorAlert("This email is not registered");
             }
