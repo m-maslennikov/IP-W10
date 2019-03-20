@@ -812,8 +812,9 @@ function recoverPassword(){
                 <br>Please enter this code on this page:<br> 
                 https://sdi2.herokuapp.com/code.php?email=$account_email&code=$account_validation_code";
                 sendMail($account_email, $account_email, $subject, $message);
+                displaySuccessAlert("Check your email for further actions.");
             } else {
-                displayErrorAlert("This email is not registered");
+                displayErrorAlert("This email is not registered.");
             }
         } else {
             displayErrorAlert("Something went wrong. Please try again.");
