@@ -1,34 +1,8 @@
 <?php deleteCar(); ?>
 <?php enableCar(); ?>
 <?php disableCar(); ?>
+<?php bulkCarAction(); ?>
 
-<?php 
-if(isset($_POST['checkboxArray'])){
-    foreach ($_POST['checkboxArray'] as $car_id) {
-        $bulk_action = $_POST['bulk_action'];
-        switch ($bulk_action) {
-            case 'enable':
-                $query = "UPDATE cars SET car_status = 'Available' WHERE car_id = $car_id";
-                $make_enable_query = mysqli_query($connection,$query);
-                validateQuery($make_enable_query);
-                break;
-            case 'disable':
-                $query = "UPDATE cars SET car_status = 'Unavailable' WHERE car_id = $car_id";
-                $make_enable_query = mysqli_query($connection,$query);
-                validateQuery($make_enable_query);
-                break;
-            case 'delete':
-                $query = "DELETE FROM cars WHERE car_id = {$car_id}";
-                $delete_car_query = mysqli_query($connection, $query);
-                validateQuery($delete_car_query);
-                break;
-            default:
-                //echo "No option selected";
-                break;
-        }
-    }
-}
-?>
 <form action="" method="post">
     <div class="row justify-content-start">
         <div class="col-lg-4">
@@ -98,7 +72,7 @@ if(isset($_POST['checkboxArray'])){
                     echo "<tr>";
                         ?>
 
-                        <td><input class="checkboxes" type="checkbox" name="checkboxArray[]" value="<?php echo $car_id; ?>" id="selectAllBoxes"></td>
+                        <td><input class="checkboxes" type="checkbox" name="carsCheckboxArray[]" value="<?php echo $car_id; ?>" id="selectAllBoxes"></td>
                         
                         <?php
                         echo "<td>{$car_id}</td>";

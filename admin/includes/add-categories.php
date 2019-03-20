@@ -1,3 +1,4 @@
+<!-- This is a part for displaying Add Category form -->
 <form action="" method="post">
     <div class="form-group">
         <h2>Add new category</h2>

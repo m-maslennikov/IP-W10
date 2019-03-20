@@ -1,3 +1,6 @@
+<!-- This is a template for new Admin pages. 
+Doesn't make any sense for the project -->
+
 <?php include "includes/_admin-head.php"; ?>
 <div class="container-fluid">
     <div class="row">

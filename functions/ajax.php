@@ -1,6 +1,7 @@
 <?php
 include("db.php");
-// AJAX check if email already registered
+
+// AJAX backend: check if email already registered and return result to the AJAX frontend javascript.
 if (isset($_POST['email_check'])) {
     $email = $_POST['email'];
     $query = "SELECT account_email FROM accounts WHERE account_email='$email'";

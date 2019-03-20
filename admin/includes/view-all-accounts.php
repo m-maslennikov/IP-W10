@@ -2,33 +2,9 @@
 <?php enableAccount(); ?>
 <?php disableAccount(); ?>
 <?php include "includes/_admin-delete-modal.php"; ?>
-<?php 
-if(isset($_POST['checkboxArray'])){
-    foreach ($_POST['checkboxArray'] as $account_id) {
-        $bulk_action = $_POST['bulk_action'];
-        switch ($bulk_action) {
-            case 'enable':
-                $query = "UPDATE accounts SET account_status = 'Enabled' WHERE account_id = $account_id";
-                $make_enable_query = mysqli_query($connection,$query);
-                validateQuery($make_enable_query);
-                break;
-            case 'disable':
-                $query = "UPDATE accounts SET account_status = 'Disabled' WHERE account_id = $account_id";
-                $make_disable_query = mysqli_query($connection,$query);
-                validateQuery($make_disable_query);
-                break;
-            case 'delete':
-                $query = "DELETE FROM accounts WHERE account_id = {$account_id}";
-                $delete_car_query = mysqli_query($connection, $query);
-                validateQuery($delete_car_query);
-                break;
-            default:
-                //echo "No option selected";
-                break;
-        }
-    }
-}
-?>
+<?php bulkAccountAction(); ?>
+
+<!-- This is a part for displaying All Accounts table -->
 <form action="" method="post">
     <div class="row justify-content-start">
         <div class="col-lg-4">
@@ -71,7 +47,7 @@ if(isset($_POST['checkboxArray'])){
                     </tr>
                 </thead>
                 <tbody>
-                <?php
+                <?php // PAGINATION. It appears only on accounts page. Can be converted to a common function but it's better to use Laravel.
                 $items_per_page = 10;
                 $query = 'SELECT * FROM accounts';
                 $select_accounts = mysqli_query($connection, $query);
@@ -106,10 +82,9 @@ if(isset($_POST['checkboxArray'])){
                     echo "<tr>";
                     ?>
 
-                    <td><input class="checkboxes" type="checkbox" name="checkboxArray[]" value="<?php echo $account_id; ?>" id="selectAllBoxes"></td>
+                    <td><input class="checkboxes" type="checkbox" name="accountsCheckboxArray[]" value="<?php echo $account_id; ?>" id="selectAllBoxes"></td>
 
                     <?php
-                    //<a href='accounts.php?delete={$account_id}' class='text-danger px-1' onclick=\"return confirm('Are you sure?')\"><i class='fas fa-trash'></i></a>
                         echo "<td>{$account_id}</td>";
                         echo "<td>{$account_email}</td>";
                         echo "<td>{$account_first_name} {$account_last_name}</td>";

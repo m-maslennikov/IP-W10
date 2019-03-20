@@ -1,4 +1,5 @@
 <!-- Icon Cards-->
+<!-- This file renders a dashboard for admin/staff -->
     <div class="row">
         <div class="col-xl-3 col-sm-6 mb-3">
           <div class="card text-white bg-primary o-hidden h-100">
@@ -7,13 +8,7 @@
                 <i class="fas fa-fw fa-users"></i>
               </div>
               <div class="mr-5">
-                <?php
-                $query = "SELECT * FROM accounts";
-                $select_all_accounts = mysqli_query($connection, $query);
-                validateQuery($select_all_accounts);
-                $accounts_count = mysqli_num_rows($select_all_accounts);
-                echo "$accounts_count Accounts";
-                ?>
+                <?php echo entityCount("accounts"); ?> Accounts
               </div>
             </div>
             <a class="card-footer text-white clearfix small z-1" href="accounts.php">
@@ -31,13 +26,7 @@
                 <i class="fas fa-fw fa-list"></i>
               </div>
               <div class="mr-5">
-              <?php
-              $query = "SELECT * FROM cars";
-              $select_all_cars = mysqli_query($connection, $query);
-              validateQuery($select_all_cars);
-              $cars_count = mysqli_num_rows($select_all_cars);
-              echo "$cars_count Cars";
-              ?>
+              <?php echo entityCount("cars"); ?> Cars
               </div>
             </div>
             <a class="card-footer text-white clearfix small z-1" href="cars.php">
@@ -55,13 +44,7 @@
                 <i class="fas fa-fw fa-shopping-cart"></i>
               </div>
               <div class="mr-5">
-              <?php
-              $query = "SELECT * FROM categories";
-              $select_all_categories = mysqli_query($connection, $query);
-              validateQuery($select_all_categories);
-              $categories_count = mysqli_num_rows($select_all_categories);
-              echo "$categories_count Categories";
-              ?>
+              <?php echo entityCount("categories"); ?> Categories
               </div>
             </div>
             <a class="card-footer text-white clearfix small z-1" href="categories.php">
@@ -79,13 +62,7 @@
                 <i class="fas fa-fw fa-life-ring"></i>
               </div>
               <div class="mr-5">
-              <?php
-              $query = "SELECT * FROM bookings";
-              $select_all_bookings = mysqli_query($connection, $query);
-              validateQuery($select_all_bookings);
-              $bookings_count = mysqli_num_rows($select_all_bookings);
-              echo "$bookings_count Bookings";
-              ?>
+              <?php echo entityCount("bookings"); ?> Bookings              
               </div>
             </div>
             <a class="card-footer text-white clearfix small z-1" href="bookings.php">
@@ -108,8 +85,8 @@
           var data = google.visualization.arrayToDataTable([
             ['Data', 'Count'],
             <?php
-            $element_text = ['Accounts','Cars','Categories','Bookings'];
-            $element_count = [$accounts_count,$cars_count,$categories_count,$bookings_count];
+            $element_text = ['Total Accounts','Total Cars','Total Categories','Total Bookings'];
+            $element_count = [entityCount("accounts"),entityCount("cars"),entityCount("categories"),entityCount("bookings")];
             for ($i=0; $i < 4; $i++) { 
               echo "['{$element_text[$i]}'" . "," . "{$element_count[$i]}],";
             }

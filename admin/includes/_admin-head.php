@@ -6,7 +6,7 @@ include "../functions/init.php";
 ?>
 
 <?php 
-// Check for staff or admin
+// Check for staff or admin. Redirect to root index.php if not staff/admin
 if(!isAdmin() && !isStaff()) {
     redirect("../");
 }

@@ -3,6 +3,7 @@
 
 // Connectiong to the database (hostName, userName, password, databaseName)
 $connection = mysqli_connect('109.106.214.69:443','week10','pass@word1','rentacar');
+//$connection = mysqli_connect('sql307.epizy.com','epiz_23611143','zJv7bupWBE0F','epiz_23611143_week10'); 
 
 // The following functions are created to make PHP code more readable
 // ------------------------------------------------------------------

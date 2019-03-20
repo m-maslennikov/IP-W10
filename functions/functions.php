@@ -81,6 +81,15 @@ function sendEmail($email, $subject, $msg, $headers) {
 // ADMIN section functions START
 // ------------------------------------------------------------------
 
+// Functions for dashboard widgets
+// Count total number of rows in selected table
+function entityCount($entity){
+    $query = "SELECT * FROM $entity";
+    $result = query($query);
+    $entity_count = rowCount($result);
+    return $entity_count;
+}
+
 // Function for adding new car categories
 function insertCategory() {
     if (isset($_POST['add_category'])) {
@@ -150,6 +159,32 @@ function deleteCategory() {
     }
 } // EOF
 
+
+//function for handling bulk car actions
+function bulkCarAction(){
+    if(isset($_POST['carsCheckboxArray'])){
+        foreach ($_POST['carsCheckboxArray'] as $car_id) {
+            $bulk_action = $_POST['bulk_action'];
+            switch ($bulk_action) {
+                case 'enable':
+                    $query = "UPDATE cars SET car_status = 'Available' WHERE car_id = $car_id";
+                    query($query);
+                    break;
+                case 'disable':
+                    $query = "UPDATE cars SET car_status = 'Unavailable' WHERE car_id = $car_id";
+                    query($query);
+                    break;
+                case 'delete':
+                    $query = "DELETE FROM cars WHERE car_id = {$car_id}";
+                    query($query);
+                    break;
+                default:
+                    //echo "No option selected";
+                    break;
+            }
+        }
+    }
+}
 // Function for adding a new car
 function addCar() {
     if (isset($_POST['add_car'])) {
@@ -244,6 +279,32 @@ function disableCar() {
     }
 } // EOF
 
+//function for handling bulk account actions
+function bulkAccountAction(){
+    if(isset($_POST['accountsCheckboxArray'])){
+        foreach ($_POST['accountsCheckboxArray'] as $account_id) {
+            $bulk_action = $_POST['bulk_action'];
+            switch ($bulk_action) {
+                case 'enable':
+                    $query = "UPDATE accounts SET account_status = 'enabled' WHERE account_id = $account_id";
+                    query($query);
+                    break;
+                case 'disable':
+                    $query = "UPDATE accounts SET account_status = 'disabled' WHERE account_id = $account_id";
+                    query($query);
+                    break;
+                case 'delete':
+                    $query = "DELETE FROM accounts WHERE account_id = {$account_id}";
+                    query($query);
+                    break;
+                default:
+                    //echo "No option selected";
+                    break;
+            }
+        }
+    }
+}
+
 // Function for adding an account from admin panel
 function addAccount() {
     if (isset($_POST['add_account'])) {
@@ -327,6 +388,51 @@ function disableAccount() {
     }
 } // EOF
 
+// Function for rendering all bookings in ADMIN panel
+function showAllBookings(){
+    $query = "SELECT a.account_email
+                    , b.booking_id
+                    , b.car_id
+                    , b.booking_status
+                    , b.booking_booked_start_date
+                    , b.booking_booked_end_date
+                    , c.car_make
+                    , c.car_model
+                FROM bookings AS b
+                INNER JOIN accounts AS a ON b.account_id=a.account_id
+                INNER JOIN cars AS c ON b.car_id=c.car_id";
+    $result = query($query);
+    while($row = fetchArray($result)) {
+        $booking_id = $row['booking_id'];
+        $car_id = $row['car_id'];
+        $booking_status = $row['booking_status'];
+        $booking_booked_start_date = $row['booking_booked_start_date'];
+        $booking_booked_end_date = $row['booking_booked_end_date'];
+        $car_make = $row['car_make'];
+        $car_model = $row['car_model'];
+        $account_email = $row['account_email'];
+
+        echo "<tr>";
+            echo "<td><input class=\"checkboxes\" type=\"checkbox\" name=\"bookingsCheckboxArray[]\" value=\"$booking_id\" id=\"selectAllBoxes\"></td>";
+            echo "<td>{$booking_id}</td>";
+            echo "<td>{$car_make} {$car_model}</td>";
+            echo "<td>{$car_id}</td>";
+            echo "<td>{$account_email}</td>";
+            echo "<td>{$booking_status}</td>";
+            echo "<td>{$booking_booked_start_date}</td>";
+            echo "<td>{$booking_booked_end_date}</td>";
+            echo "
+                <td>
+                    <a href='../bookings.php?action=view_booking&booking_id={$booking_id}' target='_blank' class='text-dark px-1'><i class='fas fa-eye'></i></a>
+                    <a href='bookings.php?accept={$booking_id}' class='text-success px-1'><i class='fas fa-check'></i></a>
+                    <a href='javascript:void(0);' rel='{$booking_id}' class='text-warning px-1 reject-link'><i class='fas fa-ban'></i></a>
+                    <a href='bookings.php?action=edit&booking_id={$booking_id}' class='text-dark px-1'><i class='fas fa-pencil-alt'></i></a>
+                    <a href='bookings.php?delete={$booking_id}' class='text-danger px-1'><i class='fas fa-trash'></i></a>
+                </td>";
+        echo "</tr>";
+    }
+}
+
 // Function for accepting a booking request from admin panel
 function acceptBooking() {
     if(isset($_GET['accept'])) {
@@ -349,15 +455,49 @@ function acceptBooking() {
 
 // Function for rejecting a booking request from admin panel
 function rejectBooking() {
-    if(isset($_GET['reject'])) {
-        $booking_id = $_GET['reject'];
-        $query = "UPDATE bookings SET booking_status = 'Rejected' WHERE booking_id = $booking_id";
+    if(isset($_POST['reject_booking'])) {
+        $booking_id = escape($_POST['booking_id']);
+        $booking_comment = escape($_POST['booking_comment']);
+        $query = "SELECT a.account_email, b.booking_id
+                    FROM bookings AS b
+                    INNER JOIN accounts AS a ON b.account_id=a.account_id
+                    WHERE b.booking_id = $booking_id";
+        $result = query($query);
+        $row = fetchArray($result);
+        $account_email = $row['account_email'];
+        $query = "UPDATE bookings SET booking_status = 'Rejected', booking_comment = '$booking_comment' WHERE booking_id = $booking_id";
         query($query);
-        sendMail();
+        $subject = "Booking is rejected";
+        $message = "Your booking is rejected. The reason provided by staff: " . $_POST['booking_comment'] . "";
+        sendMail($account_email, $account_email, $subject, $message);
         header("Location: bookings.php");
     }
 } // EOF
 
+//function for handling bulk booking actions
+function bulkBookingAction(){
+    if(isset($_POST['bookingsCheckboxArray'])){
+        foreach ($_POST['bookingsCheckboxArray'] as $booking_id) {
+            $bulk_action = clean($_POST['bulk_action']);
+            switch ($bulk_action) {
+                case 'accept':
+                    $query = "UPDATE bookings SET booking_status = 'Accepted' WHERE booking_id = $booking_id";
+                    query($query);
+                    break;
+                case 'reject':
+                    $query = "UPDATE bookings SET booking_status = 'Rejected' WHERE booking_id = $booking_id";
+                    query($query);
+                    break;
+                case 'delete':
+                    $query = "DELETE FROM bookings WHERE booking_id = {$booking_id}";
+                    query($query);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+}
 // ------------------------------------------------------------------
 // ADMIN section functions END
 // ------------------------------------------------------------------
@@ -491,7 +631,7 @@ function registerUser($account_first_name, $account_last_name, $account_email, $
 
         $subject = "Activate Account";
         $message = "Please click the following link to activate account: 
-        http://localhost/ip-w10/activate.php?email=$account_email&code=$account_validation_code";
+        http://week10.rf.gd/activate.php?email=$account_email&code=$account_validation_code";
         sendMail($account_email, $account_email, $subject, $message);
         return true;
     }
@@ -670,11 +810,11 @@ function recoverPassword(){
                 $subject = "Recover Password";
                 $message = "Your validation code is: $account_validation_code
                 Click the following link to reset your password: 
-                http://localhost/ip-w10/code.php?email=$account_email&code=$account_validation_code";
+                http://week10.rf.gd/code.php?email=$account_email&code=$account_validation_code";
                 sendMail($account_email, $account_email, $subject, $message);
                 displaySuccessAlert("Your validation code is: $account_validation_code
                 Click the following link to reset your password: 
-                http://localhost/ip-w10/code.php?email=$account_email&code=$account_validation_code");
+                http://week10.rf.gd/code.php?email=$account_email&code=$account_validation_code");
             } else {
                 displayErrorAlert("This email is not registered");
             }

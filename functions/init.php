@@ -1,4 +1,7 @@
 <?php
+// General functions that will be used by almost all php pages in the project
+
+
 // Turn on Output buffering for all pages. It's needed for redirections work properly.
 ob_start();
 

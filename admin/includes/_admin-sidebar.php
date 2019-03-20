@@ -59,7 +59,10 @@
           <span>Website</span>
         </a>
       </li>
-      
+    </ul>
+
+      <!-- This is just a template for dropdown
+
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-fw fa-folder"></i>
@@ -67,14 +70,16 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           <h6 class="dropdown-header">Login Screens:</h6>
-          <a class="dropdown-item" href="../user/login.php">Login</a>
-          <a class="dropdown-item" href="../user/register.php">Register</a>
-          <a class="dropdown-item" href="../user/forgot-password.php">Forgot Password</a>
+          <a class="dropdown-item" href="../login.php">Login</a>
+          <a class="dropdown-item" href="../register.php">Register</a>
+          <a class="dropdown-item" href="../forgot-password.php">Forgot Password</a>
           <div class="dropdown-divider"></div>
           <h6 class="dropdown-header">Other Pages:</h6>
           <a class="dropdown-item" href="404.html">404 Page</a>
           <a class="dropdown-item active" href="blank.html">Blank Page</a>
         </div>
-      </li>
+      </li> 
       
-    </ul>
+      This is just a template for dropdown -->
+      
+    

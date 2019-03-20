@@ -1,5 +1,6 @@
 <?php addAccount(); ?>
 
+<!-- This is a part for displaying Add Account form -->
 <form action="" method="post" enctype=multipart/form-data>
     <div class="form-group">
         <label for="account_email">Email</label>

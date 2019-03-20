@@ -7,7 +7,6 @@
                 <li class="breadcrumb-item active">
                     <a href="index.php">Dashboard</a>
                 </li>
-                <!--<li class="breadcrumb-item">Blank Page</li>-->
             </ol>
         </div><!-- /.col-lg-12 -->
         <!-- Page Content -->

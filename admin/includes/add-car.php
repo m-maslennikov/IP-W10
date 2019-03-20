@@ -1,5 +1,6 @@
 <?php addCar(); ?>
 
+<!-- This is a part for displaying Add Car form -->
 <form action="" method="post" enctype=multipart/form-data>
     <div class="form-group">
         <label for="car_make">Make</label>
