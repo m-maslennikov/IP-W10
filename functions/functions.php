@@ -1024,8 +1024,6 @@ function sendMail($emailTo, $emailToName, $subject, $message){
     
     if(!$mail->send()){
         echo "Mailer Error: " . $mail->ErrorInfo;
-    }else{
-        echo "Message sent!";
     }
 } // EOF
 
