@@ -67,9 +67,6 @@ function displaySuccessAlert($alert) {
     </div>";    
 }
 
-function sendEmail($email, $subject, $msg, $headers) {
-    return mail($email, $subject, $msg, $headers);
-}
 
 // ------------------------------------------------------------------
 // General helper functions END
