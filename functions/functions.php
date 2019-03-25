@@ -533,7 +533,6 @@ function updatePassword($account_id, $password){
     $password = password_hash($password, PASSWORD_BCRYPT, array('cost' => 10));
     $query = "UPDATE accounts SET account_password = '$password' WHERE account_id = '$account_id'";
     $result = query($query);
-    validateQuery($result);
     displaySuccessAlert("Password has been updated.");
 } // EOF
 
@@ -549,7 +548,6 @@ function validateUserPassword(){
             // go verify current password
             $query = "SELECT account_password FROM accounts WHERE account_id = '$account_id'";
             $result = query($query);
-            validateQuery($result);
             if(rowCount($result) == 1) {
                 $row = fetchArray($result);
                 $db_account_password = $row['account_password'];
@@ -624,8 +622,6 @@ function registerUser($account_first_name, $account_last_name, $account_email, $
         $account_validation_code = md5($account_email . microtime());
         $query = "INSERT INTO accounts (account_first_name, account_last_name, account_email, account_password, account_status, account_validation_code) VALUES ('{$account_first_name}','{$account_last_name}','{$account_email}','{$account_password}','disabled','{$account_validation_code}')";
         query($query);
-        validateQuery($query);
-
         $subject = "Activate Account";
         $message = "Please click the following link to activate account:<br>
         https://sdi2.herokuapp.com/activate.php?email=$account_email&code=$account_validation_code";
@@ -683,11 +679,9 @@ function activateAccount() {
             $account_validation_code = escape(clean($_GET['code']));
             $query = "SELECT account_id FROM accounts WHERE account_email = '$account_email' AND account_validation_code = '$account_validation_code'";
             $result = query($query);
-            validateQuery($result);
             if(rowCount($result) == 1) {
                 $query = "UPDATE accounts SET account_status = 'enabled', account_validation_code = '0' WHERE account_email = '$account_email' AND account_validation_code = '$account_validation_code'";
-                $result = query($query);
-                validateQuery($result);
+                query($query);
                 setSessionMessage("Your account has been activated. You can log in.");
                 redirect("login.php");
             } else {
@@ -702,7 +696,6 @@ function activateAccount() {
 function loginUser($email, $password) {
     $query = "SELECT account_id, account_email, account_password, account_type FROM accounts WHERE account_email = '$email' AND account_status = 'enabled'";
     $result = query($query);
-    validateQuery($result);
     if(rowCount($result) == 1) {
         $row = fetchArray($result);
         $account_id = $row['account_id'];
@@ -802,8 +795,7 @@ function recoverPassword(){
                 $account_validation_code = md5($account_email . microtime());
                 setcookie('temp_access_code', $account_validation_code, time() + 1800);
                 $query = "UPDATE accounts SET account_validation_code = '$account_validation_code' WHERE account_email = '$account_email'";
-                $result = query($query);
-                validateQuery($result);
+                query($query);
                 $subject = "Recover Password";
                 $message = "Your validation code is:<br>$account_validation_code
                 <br>Please enter this code on this page:<br> 
@@ -834,7 +826,6 @@ function validateCode(){
                 $account_email = escape(clean($_GET['email']));
                 $query = "SELECT account_id FROM accounts WHERE account_validation_code = '$account_validation_code' AND account_email = '$account_email'";
                 $result = query($query);
-                validateQuery($result);
                 if(rowCount($result) == 1){
                     setcookie('temp_access_code', $account_validation_code, time() + 300);
                     setSessionMessage("Validation code is accepted. Set a new password.");
@@ -862,8 +853,7 @@ function resetPassword(){
                     if($account_password === $account_password_confirmation){
                         $account_password = password_hash($account_password, PASSWORD_BCRYPT, array('cost' => 10));
                         $query = "UPDATE accounts SET account_password = '$account_password', account_validation_code = '0' WHERE account_email = '$account_email'";
-                        $result = query($query);
-                        validateQuery($result);
+                        query($query);
                         setSessionMessage("Password was successfully updated. You can log in.");
                         unset($_COOKIE['temp_access_code']);
                         setcookie('temp_access_code', '', time() - 300);
