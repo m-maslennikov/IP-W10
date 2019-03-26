@@ -16,7 +16,7 @@ function clean($string) {
 }
 
 function redirect($location) {
-    return redirect("{$location}");
+    return header("Location: {$location}");
 }
 
 function setSessionMessage($message){
