@@ -989,25 +989,6 @@ function bookCar(){
     }
 } // EOF
 
-// Function for retrieving user profile info
-function getProfile(){
-    if(isset($_SESSION['account_email'])) {
-        $account_email = $_SESSION['account_email'];
-        $query = "SELECT * FROM accounts WHERE account_email = '$account_email'";
-        $result = query($query);
-        while($row = fetchArray($query)) {
-            $account_email = $row['account_email'];
-            $account_password = $row['account_password'];
-            $account_id = $row['account_id'];
-            $account_first_name = $row['account_first_name'];
-            $account_last_name = $row['account_last_name'];
-            $account_phone = $row['account_phone'];
-            $account_address = $row['account_address'];
-            $account_dob = $row['account_dob'];
-        }
-    }
-} // EOF
-
 // Function for sending mail via PHPMailer class
 function sendMail($emailTo, $emailToName, $subject, $message){
     $mail = new PHPMailer;
