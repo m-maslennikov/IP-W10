@@ -16,7 +16,7 @@ function clean($string) {
 }
 
 function redirect($location) {
-    return header("Location: {$location}");
+    return redirect("{$location}");
 }
 
 function setSessionMessage($message){
@@ -98,7 +98,7 @@ function insertCategory() {
         } else {
             $query = "INSERT INTO categories (category_name, category_daily_price, category_description) VALUES ('{$category_name}','{$category_daily_price}','{$category_description}')";
             query($query);
-            header("Location: categories.php");
+            redirect("categories.php");
         }
     }
 } // EOF
@@ -141,7 +141,7 @@ function updateCategory($category_id) {
             category_description = '{$category_description}' 
             WHERE category_id = {$category_id}";
             query($query);
-            header("Location: categories.php");
+            redirect("categories.php");
         }
     }
 } // EOF
@@ -152,7 +152,7 @@ function deleteCategory() {
         $category_id = $_GET['delete'];
         $query = "DELETE FROM categories WHERE category_id = {$category_id}";
         query($query);
-        header("Location: categories.php");
+        redirect("categories.php");
     }
 } // EOF
 
@@ -242,7 +242,7 @@ function updateCar($car_id) {
                 car_seats = '{$car_seats}' 
                 WHERE car_id = {$car_id}";
         query($query);
-        header("Location: cars.php");
+        redirect("cars.php");
     }
 } // EOF
 
@@ -252,7 +252,7 @@ function deleteCar() {
         $car_id = $_GET['delete'];
         $query = "DELETE FROM cars WHERE car_id = {$car_id}";
         query($query);
-        header("Location: cars.php");
+        redirect("cars.php");
     }
 } // EOF
 
@@ -262,7 +262,7 @@ function enableCar() {
         $car_id = $_GET['enable'];
         $query = "UPDATE cars SET car_status = 'Available' WHERE car_id = $car_id";
         query($query);
-        header("Location: cars.php");
+        redirect("cars.php");
     }
 } // EOF
 
@@ -272,7 +272,7 @@ function disableCar() {
         $car_id = $_GET['disable'];
         $query = "UPDATE cars SET car_status = 'Available' WHERE car_id = $car_id";
         query($query);
-        header("Location: cars.php");
+        redirect("cars.php");
     }
 } // EOF
 
@@ -313,7 +313,7 @@ function addAccount() {
                 VALUES ('{$account_password}','{$account_email}','{$account_type}')";
         query($query);
         displaySessionMessage("User created. <a href='accounts.php'>Go to accounts</a>");
-        //header("Location: accounts.php");
+        //redirect("accounts.php");
     }
 } // EOF
 
@@ -351,7 +351,7 @@ function updateAccount($account_id) {
                 account_phone = '{$account_phone}'
                 WHERE account_id = {$account_id}";
         query($query);
-        header("Location: accounts.php");
+        redirect("accounts.php");
     }
 } // EOF
 
@@ -361,7 +361,7 @@ function deleteAccount() {
         $account_id = $_GET['delete'];
         $query = "DELETE FROM accounts WHERE account_id = {$account_id}";
         query($query);
-        header("Location: accounts.php");
+        redirect("accounts.php");
     }
 } // EOF
 
@@ -371,7 +371,7 @@ function enableAccount() {
         $account_id = $_GET['enable'];
         $query = "UPDATE accounts SET account_status = 'enabled' WHERE account_id = $account_id";
         query($query);
-        header("Location: accounts.php");
+        redirect("accounts.php");
     }
 } // EOF
 
@@ -381,7 +381,7 @@ function disableAccount() {
         $account_id = $_GET['disable'];
         $query = "UPDATE accounts SET account_status = 'disabled' WHERE account_id = $account_id";
         query($query);
-        header("Location: accounts.php");
+        redirect("accounts.php");
     }
 } // EOF
 
@@ -446,7 +446,7 @@ function acceptBooking() {
         $subject = "Payment information";
         $message = "Your booking is confirmed. You may pay by cash or credit card in our office.";
         sendMail($account_email, $account_email, $subject, $message);
-        header("Location: bookings.php");
+        redirect("bookings.php");
     }
 } // EOF
 
@@ -467,7 +467,7 @@ function rejectBooking() {
         $subject = "Booking is rejected";
         $message = "Your booking is rejected. The reason provided by staff: " . $_POST['booking_comment'] . "";
         sendMail($account_email, $account_email, $subject, $message);
-        header("Location: bookings.php");
+        redirect("bookings.php");
     }
 } // EOF
 
@@ -911,7 +911,7 @@ function showAllCars(){
         $category_id = $_GET['category_id'];
         $query = "SELECT * FROM cars WHERE category_id = $category_id";
         $result = query($query);
-        while($row = mysqli_fetch_assoc($result)) {
+        while($row = fetchArray($result)) {
             $car_id = $row['car_id'];
             $car_make = $row['car_make'];
             $car_model = $row['car_model'];
@@ -989,6 +989,25 @@ function bookCar(){
     }
 } // EOF
 
+// Function for retrieving user profile info
+function getProfile(){
+    if(isset($_SESSION['account_email'])) {
+        $account_email = $_SESSION['account_email'];
+        $query = "SELECT * FROM accounts WHERE account_email = '$account_email'";
+        $result = query($query);
+        while($row = fetchArray($query)) {
+            $account_email = $row['account_email'];
+            $account_password = $row['account_password'];
+            $account_id = $row['account_id'];
+            $account_first_name = $row['account_first_name'];
+            $account_last_name = $row['account_last_name'];
+            $account_phone = $row['account_phone'];
+            $account_address = $row['account_address'];
+            $account_dob = $row['account_dob'];
+        }
+    }
+} // EOF
+
 // Function for sending mail via PHPMailer class
 function sendMail($emailTo, $emailToName, $subject, $message){
     $mail = new PHPMailer;
@@ -1018,10 +1037,5 @@ function sendMail($emailTo, $emailToName, $subject, $message){
 // ------------------------------------------------------------------
 // Content functions END
 // ------------------------------------------------------------------
-
-
-////////////////////////////MAIL///////////////////////////////////////
-
-
 
 ?>

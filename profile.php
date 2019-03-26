@@ -1,24 +1,6 @@
 <?php include "includes/_head.php"; ?>
 
-<?php
-if(isset($_SESSION['account_email'])) {
-    $account_email = $_SESSION['account_email'];
-    $query = "SELECT * FROM accounts WHERE account_email = '$account_email'";
-    $select_profile_query = mysqli_query($connection, $query);
-    validateQuery($select_profile_query);
-    while($row = mysqli_fetch_assoc($select_profile_query)) {
-        $account_email = $row['account_email'];
-        $account_password = $row['account_password'];
-        $account_id = $row['account_id'];
-        $account_first_name = $row['account_first_name'];
-        $account_last_name = $row['account_last_name'];
-        $account_phone = $row['account_phone'];
-        $account_address = $row['account_address'];
-        $account_dob = $row['account_dob'];
-    }
-}
-
-?>
+<?php getProfile(); ?>
 
 
   <!-- Navigation -->
