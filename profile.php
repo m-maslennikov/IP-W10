@@ -5,7 +5,7 @@ if(isset($_SESSION['account_email'])) {
   $account_email = $_SESSION['account_email'];
   $query = "SELECT * FROM accounts WHERE account_email = '$account_email'";
   $result = query($query);
-  while($row = fetchArray($query)) {
+  while($row = fetchArray($result)) {
       $account_email = $row['account_email'];
       $account_password = $row['account_password'];
       $account_id = $row['account_id'];
