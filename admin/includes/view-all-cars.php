@@ -55,9 +55,8 @@
                 <tbody>
                 <?php
                 $query = 'SELECT * FROM cars';
-                $select_cars = mysqli_query($connection, $query);
-                validateQuery($select_cars);
-                while($row = mysqli_fetch_assoc($select_cars)) {
+                $result = query($query);
+                while($row = fetchArray($result)) {
                     $car_id = $row['car_id'];
                     $car_make = $row['car_make'];
                     $car_model = $row['car_model'];
