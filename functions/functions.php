@@ -420,7 +420,6 @@ function showAllBookings(){
             echo "<td>{$booking_booked_end_date}</td>";
             echo "
                 <td>
-                    <a href='../bookings.php?action=view_booking&booking_id={$booking_id}' target='_blank' class='text-dark px-1'><i class='fas fa-eye'></i></a>
                     <a href='bookings.php?accept={$booking_id}' class='text-success px-1'><i class='fas fa-check'></i></a>
                     <a href='javascript:void(0);' rel='{$booking_id}' class='text-warning px-1 reject-link'><i class='fas fa-ban'></i></a>
                     <a href='bookings.php?action=edit&booking_id={$booking_id}' class='text-dark px-1'><i class='fas fa-pencil-alt'></i></a>
