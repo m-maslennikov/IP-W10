@@ -2,9 +2,8 @@
 if(isset($_GET['car_id'])) {
     $car_id = $_GET['car_id'];
     $query = "SELECT * FROM cars WHERE car_id = $car_id";
-    $select_car_query = mysqli_query($connection, $query);
-    validateQuery($select_car_query);
-    while($row = mysqli_fetch_assoc($select_car_query)) {
+    $result = query($query);
+    while($row = fetchArray($result)) {
         $car_make = $row['car_make'];
         $car_model = $row['car_model'];
         $car_colour = $row['car_colour'];
@@ -54,10 +53,9 @@ updateCar($car_id);
         <label for="category_id">Category</label>
         <select name="category_id" id="category_id" class="form-control">
             <?php
-                $query = "SELECT * FROM categories";
-                $select_all_categories = mysqli_query($connection, $query);
-                validateQuery($select_all_categories);
-                while($row = mysqli_fetch_assoc($select_all_categories)) {
+                $query = "SELECT category_id, category_name FROM categories";
+                $result = query($query);
+                while($row = fetchArray($result)) {
                     $category_id = $row['category_id'];
                     $category_name = $row['category_name'];
                     echo "<option value='{$category_id}'>{$category_name}</option>";

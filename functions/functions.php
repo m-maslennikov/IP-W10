@@ -270,7 +270,7 @@ function enableCar() {
 function disableCar() {
     if(isset($_GET['disable'])) {
         $car_id = $_GET['disable'];
-        $query = "UPDATE cars SET car_status = 'Available' WHERE car_id = $car_id";
+        $query = "UPDATE cars SET car_status = 'Unavailable' WHERE car_id = $car_id";
         query($query);
         redirect("cars.php");
     }
