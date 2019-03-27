@@ -80,10 +80,9 @@
                         echo "<td>{$car_status}</td>";
                         echo "<td>{$car_body_type}</td>";
                         echo "<td>{$car_power}</td>";
-                            $query = "SELECT * FROM categories WHERE category_id = {$category_id}";
-                            $select_category_id = mysqli_query($connection, $query);
-                            validateQuery($select_category_id);
-                            while($row = mysqli_fetch_assoc($select_category_id)) {
+                            $query = "SELECT category_name FROM categories WHERE category_id = {$category_id}";
+                            $result = query($query);
+                            while($row = fetchArray($result)) {
                                 $category_name = $row['category_name'];
                                 echo "<td>{$category_name}</td>";
                             }
