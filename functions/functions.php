@@ -181,7 +181,8 @@ function bulkCarAction(){
             }
         }
     }
-}
+} //EOF
+
 // Function for adding a new car
 function addCar() {
     if (isset($_POST['add_car'])) {
@@ -275,6 +276,66 @@ function disableCar() {
         redirect("cars.php");
     }
 } // EOF
+
+
+
+//function for handling bulk feedback actions
+function bulkFeedbackAction(){
+    if(isset($_POST['feedbacksCheckboxArray'])){
+        foreach ($_POST['feedbacksCheckboxArray'] as $feedback_id) {
+            $bulk_action = $_POST['bulk_action'];
+            switch ($bulk_action) {
+                case 'enable':
+                    $query = "UPDATE feedbacks SET feedback_status = 'New' WHERE feedback_id = $feedback_id";
+                    query($query);
+                    break;
+                case 'resolved':
+                    $query = "UPDATE feedbacks SET feedback_status = 'Resolved' WHERE feedback_id = $feedback_id";
+                    query($query);
+                    break;
+                case 'delete':
+                    $query = "DELETE FROM feedbacks WHERE feedback_id = {$feedback_id}";
+                    query($query);
+                    break;
+                default:
+                    //echo "No option selected";
+                    break;
+            }
+        }
+    }
+} //EOF
+
+// Function for deleting a feedback
+function deleteFeedback() {
+    if(isset($_GET['delete'])) {
+        $feedback_id = $_GET['delete'];
+        $query = "DELETE FROM feedbacks WHERE feedback_id = {$feedback_id}";
+        query($query);
+        redirect("feedbacks.php");
+    }
+} // EOF
+
+// Function for making a feedback available
+function enableFeedback() {
+    if(isset($_GET['enable'])) {
+        $feedback_id = $_GET['enable'];
+        $query = "UPDATE feedbacks SET feedback_status = 'New' WHERE feedback_id = $feedback_id";
+        query($query);
+        redirect("feedbacks.php");
+    }
+} // EOF
+
+// Function for making a feedback unavailable
+function resolveFeedback() {
+    if(isset($_GET['resolve'])) {
+        $feedback_id = $_GET['resolve'];
+        $query = "UPDATE feedbacks SET feedback_status = 'Resolved' WHERE feedback_id = $feedback_id";
+        query($query);
+        redirect("feedbacks.php");
+    }
+} // EOF
+
+
 
 //function for handling bulk account actions
 function bulkAccountAction(){

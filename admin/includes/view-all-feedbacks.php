@@ -1,7 +1,7 @@
-<?php //deleteFeedback(); ?>
-<?php //enableFeedback(); ?>
-<?php //disableFeedback(); ?>
-<?php //bulkFeedbackAction(); ?>
+<?php deleteFeedback(); ?>
+<?php enableFeedback(); ?>
+<?php resolveFeedback(); ?>
+<?php bulkFeedbackAction(); ?>
 
 <form action="" method="post">
     <div class="row justify-content-start">
@@ -9,8 +9,8 @@
             <div class="form-group">
                 <select class="form-control" name="bulk_action">
                     <option value="">Select Options</option>
-                    <option value="enable">Make Available</option>
-                    <option value="disable">Make Unavailable</option>
+                    <option value="enable">Make New</option>
+                    <option value="resolved">Make Resolved</option>
                     <option value="delete">Delete</option>
                 </select>
             </div>
@@ -26,7 +26,7 @@
                 <p>
                     <span class="text-dark px-1"><i class='fas fa-eye'></i></span>- View
                     <span class="text-success px-1"><i class='fas fa-check'></i></span>- Enable
-                    <span class="text-warning px-1"><i class='fas fa-ban'></i></span>- Disable
+                    <span class="text-warning px-1"><i class='fas fa-ban'></i></span>- Resolve
                     <span class="text-dark px-1"><i class='fas fa-pencil-alt'></i></span>- Edit
                     <span class="text-danger px-1"><i class='fas fa-trash'></i></span>- Delete
                 </p>
@@ -39,11 +39,11 @@
                 <thead>
                     <tr>
                         <th><input type="checkbox" name="bulk_option" id="selectAllBoxes"></th>
-                        <th>Feedback ID</th>
-                        <th>feedback_status</th>
-                        <th>account_email</th>
-                        <th>feedback_subject</th>
-                        <th>feedback_text</th>
+                        <th>ID</th>
+                        <th>Status</th>
+                        <th>Account Email</th>
+                        <th>Subject</th>
+                        <th>Message</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -78,7 +78,7 @@
                             <td>
                                 <a href='../feedbacks.php?action=view_feedback&feedback_id={$feedback_id}' target='_blank' class='text-dark px-1'><i class='fas fa-eye'></i></a>
                                 <a href='feedbacks.php?enable={$feedback_id}' class='text-success px-1'><i class='fas fa-check'></i></a>
-                                <a href='feedbacks.php?disable={$feedback_id}' class='text-warning px-1'><i class='fas fa-ban'></i></a>
+                                <a href='feedbacks.php?resolve={$feedback_id}' class='text-warning px-1'><i class='fas fa-ban'></i></a>
                                 <a href='feedbacks.php?action=edit&feedback_id={$feedback_id}' class='text-dark px-1'><i class='fas fa-pencil-alt'></i></a>
                                 <a href='feedbacks.php?delete={$feedback_id}' class='text-danger px-1'><i class='fas fa-trash'></i></a>
                             </td>";
