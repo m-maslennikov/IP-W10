@@ -1,7 +1,7 @@
-<?php deleteFeedback(); ?>
-<?php enableFeedback(); ?>
-<?php disableFeedback(); ?>
-<?php bulkFeedbackAction(); ?>
+<?php //deleteFeedback(); ?>
+<?php //enableFeedback(); ?>
+<?php //disableFeedback(); ?>
+<?php //bulkFeedbackAction(); ?>
 
 <form action="" method="post">
     <div class="row justify-content-start">
