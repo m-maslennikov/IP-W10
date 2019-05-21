@@ -80,10 +80,10 @@
                         echo "<td>{$car_status}</td>";
                         echo "<td>{$car_body_type}</td>";
                         echo "<td>{$car_power}</td>";
-                            $query = "SELECT category_name FROM categories WHERE category_id = {$category_id}";
-                            $result = query($query);
-                            while($row = fetchArray($result)) {
-                                $category_name = $row['category_name'];
+                            $query1 = "SELECT category_name FROM categories WHERE category_id = {$category_id}";
+                            $result1 = query($query1);
+                            while($row1 = fetchArray($result1)) {
+                                $category_name = $row1['category_name'];
                                 echo "<td>{$category_name}</td>";
                             }
                         echo "<td><img width='100px' src='../images/$car_image' alt='$car_image'></td>";
