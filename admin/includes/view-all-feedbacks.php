@@ -66,10 +66,10 @@
                         <?php
                         echo "<td>{$feedback_id}</td>";
                         echo "<td>{$feedback_status}</td>";
-                        $query = "SELECT account_email FROM accounts WHERE account_id = {$account_id}";
-                        $result = query($query);
-                        while($row = fetchArray($result)) {
-                            $account_email = $row['account_email'];
+                        $query1 = "SELECT account_email FROM accounts WHERE account_id = {$account_id}";
+                        $result1 = query($query1);
+                        while($row1 = fetchArray($result1)) {
+                            $account_email = $row1['account_email'];
                             echo "<td>{$account_email}</td>";
                         }
                         echo "<td>{$feedback_subject}</td>";
