@@ -96,6 +96,14 @@ function newFeedbackCount(){
 }
 
 // Count total number of new bookings
+function newBookingCount(){
+    $query = "SELECT * FROM bookings WHERE booking_status = 'Unapproved'";
+    $result = query($query);
+    $entity_count = rowCount($result);
+    return $entity_count;
+}
+
+// Count total number of new bookings
 function newBookingsCount(){
     $query = "SELECT * FROM bookings WHERE booking_status = 'Unapproved'";
     $result = query($query);
@@ -180,11 +188,11 @@ function bulkCarAction(){
             $bulk_action = $_POST['bulk_action'];
             switch ($bulk_action) {
                 case 'enable':
-                    $query = "UPDATE cars SET car_status = 'Available' WHERE car_id = $car_id";
+                    $query = "UPDATE cars SET car_status = 'available' WHERE car_id = $car_id";
                     query($query);
                     break;
                 case 'disable':
-                    $query = "UPDATE cars SET car_status = 'Unavailable' WHERE car_id = $car_id";
+                    $query = "UPDATE cars SET car_status = 'unavailable' WHERE car_id = $car_id";
                     query($query);
                     break;
                 case 'delete':
@@ -218,6 +226,24 @@ function addCar() {
                 VALUES ('{$car_make}','{$car_model}','{$car_colour}','{$car_status}','{$car_body_type}','{$car_power}','{$category_id}','{$car_image}','{$car_doors}','{$car_seats}')";
         query($query);
         displaySuccessAlert("Car added. <a href='cars.php'>Go to cars</a>");
+    }
+} // EOF
+
+// Function for adding a new inspection
+function addInspection() {
+    if (isset($_POST['add_inspection'])) {
+        $car_id = $_POST['car_id'];
+        $inspection_type_id = $_POST['inspection_type_id'];
+        $inspection_start_date = $_POST['inspection_start_date'];
+        $inspection_start_time = $_POST['inspection_start_time'];
+        $inspection_end_date = $_POST['inspection_end_date'];
+        $inspection_end_time = $_POST['inspection_end_time'];
+        $account_id = $_POST['account_id'];
+        $inspection_score = $_POST['inspection_score'];
+        $query = "INSERT INTO inspections (car_id, inspection_type_id, inspection_start_date, inspection_start_time, inspection_end_date, inspection_end_time, account_id, inspection_score) 
+                VALUES ('{$car_id}','{$inspection_type_id}','{$inspection_start_date}','{$inspection_start_time}','{$inspection_end_date}','{$inspection_end_time}','{$account_id}','{$inspection_score}')";
+        query($query);
+        displaySuccessAlert("Inspection added. <a href='inspections.php'>Go to Inspections</a>");
     }
 } // EOF
 
@@ -277,7 +303,7 @@ function deleteCar() {
 function enableCar() {
     if(isset($_GET['enable'])) {
         $car_id = $_GET['enable'];
-        $query = "UPDATE cars SET car_status = 'Available' WHERE car_id = $car_id";
+        $query = "UPDATE cars SET car_status = 'available' WHERE car_id = $car_id";
         query($query);
         redirect("cars.php");
     }
@@ -287,7 +313,7 @@ function enableCar() {
 function disableCar() {
     if(isset($_GET['disable'])) {
         $car_id = $_GET['disable'];
-        $query = "UPDATE cars SET car_status = 'Unavailable' WHERE car_id = $car_id";
+        $query = "UPDATE cars SET car_status = 'unavailable' WHERE car_id = $car_id";
         query($query);
         redirect("cars.php");
     }
@@ -331,7 +357,7 @@ function deleteFeedback() {
     }
 } // EOF
 
-// Function for making a feedback available
+// Function for making a feedback new
 function enableFeedback() {
     if(isset($_GET['enable'])) {
         $feedback_id = $_GET['enable'];
@@ -341,7 +367,7 @@ function enableFeedback() {
     }
 } // EOF
 
-// Function for making a feedback unavailable
+// Function for making a feedback resolved
 function resolveFeedback() {
     if(isset($_GET['resolve'])) {
         $feedback_id = $_GET['resolve'];
@@ -386,8 +412,11 @@ function addAccount() {
         $account_password = password_hash($account_password, PASSWORD_BCRYPT, array('cost' => 10));
         $account_email = $_POST['account_email'];
         $account_type = $_POST['account_type'];
-        $query = "INSERT INTO accounts (account_password, account_email, account_type) 
-                VALUES ('{$account_password}','{$account_email}','{$account_type}')";
+        $account_first_name = $_POST['account_first_name'];
+        $account_last_name = $_POST['account_last_name'];
+        $account_status = $_POST['account_status'];
+        $query = "INSERT INTO accounts (account_password, account_email, account_type, account_first_name, account_last_name, account_status) 
+                VALUES ('{$account_password}','{$account_email}','{$account_type}','{$account_first_name}','{$account_last_name}','{$account_status}')";
         query($query);
         displaySessionMessage("User created. <a href='accounts.php'>Go to accounts</a>");
         //redirect("accounts.php");
@@ -546,6 +575,8 @@ function rejectBooking() {
         redirect("bookings.php");
     }
 } // EOF
+
+function updateBooking($booking_id){}
 
 //function for handling bulk booking actions
 function bulkBookingAction(){
