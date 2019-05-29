@@ -5,7 +5,7 @@
             <!-- Breadcrumbs-->
             <ol class="breadcrumb">
                 <li class="breadcrumb-item active">
-                    <a href="feedbacks.php">Cars</a>
+                    <a href="feedbacks.php">Feedbacks</a>
                 </li>
                 <!--<li class="breadcrumb-item">Blank Page</li>-->
             </ol>

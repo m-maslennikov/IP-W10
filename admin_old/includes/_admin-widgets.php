@@ -26,7 +26,7 @@
                 <i class="fas fa-fw fa-list"></i>
               </div>
               <div class="mr-5">
-              <?php echo entityCount("cars"); ?> Cars
+              <?php echo newFeedbackCount(); ?> New Feedbacks
               </div>
             </div>
             <a class="card-footer text-white clearfix small z-1" href="cars.php">
@@ -62,7 +62,7 @@
                 <i class="fas fa-fw fa-life-ring"></i>
               </div>
               <div class="mr-5">
-              <?php echo entityCount("bookings"); ?> Bookings              
+              <?php echo newBookingsCount(); ?> New Bookings              
               </div>
             </div>
             <a class="card-footer text-white clearfix small z-1" href="bookings.php">

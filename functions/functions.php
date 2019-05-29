@@ -87,6 +87,22 @@ function entityCount($entity){
     return $entity_count;
 }
 
+// Count total number of new feedbacks
+function newFeedbackCount(){
+    $query = "SELECT * FROM feedbacks WHERE feedback_status = 'New'";
+    $result = query($query);
+    $entity_count = rowCount($result);
+    return $entity_count;
+}
+
+// Count total number of new bookings
+function newBookingsCount(){
+    $query = "SELECT * FROM bookings WHERE booking_status = 'Unapproved'";
+    $result = query($query);
+    $entity_count = rowCount($result);
+    return $entity_count;
+}
+
 // Function for adding new car categories
 function insertCategory() {
     if (isset($_POST['add_category'])) {
