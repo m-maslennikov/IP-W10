@@ -59,10 +59,10 @@
                       <td class="text-capitalize"><?php echo $account_status; ?></td>
                       <td class="text-capitalize"><?php echo $account_type; ?></td>
                       <td>
-                        <a href="accounts.php?enable=<?php echo $account_id; ?>" class="text-success px-1"><i class="fas fa-check"></i></a>
-                        <a href="accounts.php?disable=<?php echo $account_id; ?>" class="text-warning px-1"><i class="fas fa-ban"></i></a>
-                        <a href="accounts.php?action=edit&account_id=<?php echo $account_id; ?>" class="text-dark px-1"><i class="fas fa-pencil-alt"></i></a>
-                        <a href="javascript:void(0);" rel="<?php echo $account_id; ?>" class="text-danger px-1 delete-link"><i class="fas fa-trash"></i></a>
+                        <a href="accounts.php?enable=<?php echo $account_id; ?>" class="btn btn-success btn-circle btn-sm"><i class="fas fa-check"></i></a>
+                        <a href="accounts.php?disable=<?php echo $account_id; ?>" class="btn btn-warning btn-circle btn-sm"><i class="fas fa-ban"></i></a>
+                        <a href="accounts.php?action=edit&account_id=<?php echo $account_id; ?>" class="btn btn-secondary btn-circle btn-sm"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="javascript:void(0);" rel="<?php echo $account_id; ?>" class="btn btn-danger btn-circle btn-sm delete-link"><i class="fas fa-trash"></i></a>
                       </td>
                     </tr>
                   <?php } ?>

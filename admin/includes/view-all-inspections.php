@@ -92,11 +92,10 @@
                     <td><?php echo "$car_id: $car_make $car_model"; ?></td>
                     <td><?php echo $inspection_type_name; ?></td>
                     <td>
-                      <a href='inspections.php?action=view&inspection_id=<?php echo $inspection_id; ?>' class='text-dark px-1'><i class='fas fa-eye'></i></a>
-                      <a href='inspections.php?enable=<?php echo $inspection_id; ?>' class='text-success px-1'><i class='fas fa-check'></i></a>
-                      <a href='inspections.php?resolve=<?php echo $inspection_id; ?>' class='text-warning px-1'><i class='fas fa-ban'></i></a>
-                      <a href='inspections.php?action=edit&inspection_id=<?php echo $inspection_id; ?>' class='text-dark px-1'><i class='fas fa-pencil-alt'></i></a>
-                      <a href='inspections.php?delete=<?php echo $inspection_id; ?>' class='text-danger px-1'><i class='fas fa-trash'></i></a>
+                      <a href='inspections.php?action=view&inspection_id=<?php echo $inspection_id; ?>' class='btn btn-primary btn-circle btn-sm'><i class='fas fa-eye'></i></a>
+                      <a href='inspections.php?enable=<?php echo $inspection_id; ?>' class='btn btn-success btn-circle btn-sm'><i class='fas fa-check'></i></a>
+                      <a href='inspections.php?resolve=<?php echo $inspection_id; ?>' class='btn btn-warning btn-circle btn-sm'><i class='fas fa-ban'></i></a>
+                      <a href='inspections.php?action=edit&inspection_id=<?php echo $inspection_id; ?>' class='btn btn-secondary btn-circle btn-sm'><i class='fas fa-pencil-alt'></i></a>
                     </td>
                   </tr>
                   <?php } ?>

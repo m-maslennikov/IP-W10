@@ -59,9 +59,9 @@
                     <td><?php echo $account_email; ?></td>
                     <td><?php echo $feedback_subject; ?></td>
                     <td>
-                      <a href='feedbacks.php?action=view&feedback_id=<?php echo $feedback_id; ?>' class='text-dark px-1'><i class='fas fa-eye'></i></a>
-                      <a href='feedbacks.php?enable=<?php echo $feedback_id; ?>' class='text-success px-1'><i class='fas fa-check'></i></a>
-                      <a href='feedbacks.php?resolve=<?php echo $feedback_id; ?>' class='text-warning px-1'><i class='fas fa-ban'></i></a>
+                      <a href='feedbacks.php?action=view&feedback_id=<?php echo $feedback_id; ?>' class='btn btn-primary btn-circle btn-sm'><i class='fas fa-eye'></i></a>
+                      <a href='feedbacks.php?resolve=<?php echo $feedback_id; ?>' class='btn btn-success btn-circle btn-sm'><i class='fas fa-check'></i></a>
+                      <a href='feedbacks.php?enable=<?php echo $feedback_id; ?>' class='btn btn-warning btn-circle btn-sm'><i class='fas fa-ban'></i></a>
                     </td>
                   </tr>
                   <?php } ?>

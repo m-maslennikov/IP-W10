@@ -54,8 +54,8 @@
                         <td><?php echo $category_daily_price; ?></td>
                         <td><?php echo $category_description; ?></td>
                         <td>
-                          <a href='categories.php?edit=<?php echo $category_id; ?>' class='text-dark px-1'><i class='fas fa-pencil-alt'></i></a>
-                          <a href='categories.php?delete=<?php echo $category_id; ?>' class='text-danger px-1'><i class='fas fa-trash'></i></a>
+                          <a href='categories.php?edit=<?php echo $category_id; ?>' class='btn btn-secondary btn-circle btn-sm'><i class='fas fa-pencil-alt'></i></a>
+                          <a href='categories.php?delete=<?php echo $category_id; ?>' class='btn btn-danger btn-circle btn-sm'><i class='fas fa-trash'></i></a>
                         </td>
                       </tr>
                       <?php } ?>

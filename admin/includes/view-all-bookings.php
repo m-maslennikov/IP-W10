@@ -75,10 +75,9 @@
                         <td><?php echo $booking_booked_start_date; ?></td>
                         <td><?php echo $booking_booked_end_date; ?></td>
                         <td>
-                          <a href='bookings.php?accept=<?php echo $booking_id; ?>' class='text-success px-1'><i class='fas fa-check'></i></a>
-                          <a href='javascript:void(0);' rel='<?php echo $booking_id; ?>' class='text-warning px-1 reject-link'><i class='fas fa-ban'></i></a>
-                          <a href='bookings.php?action=edit&booking_id=<?php echo $booking_id; ?>' class='text-dark px-1'><i class='fas fa-pencil-alt'></i></a>
-                          <a href='bookings.php?delete=<?php echo $booking_id; ?>' class='text-danger px-1'><i class='fas fa-trash'></i></a>
+                          <a href='bookings.php?accept=<?php echo $booking_id; ?>' class='btn btn-success btn-circle btn-sm'><i class='fas fa-check'></i></a>
+                          <a href='javascript:void(0);' rel='<?php echo $booking_id; ?>' class='btn btn-warning btn-circle btn-sm reject-link'><i class='fas fa-ban'></i></a>
+                          <a href='bookings.php?action=edit&booking_id=<?php echo $booking_id; ?>' class='btn btn-secondary btn-circle btn-sm'><i class='fas fa-pencil-alt'></i></a>
                         </td>
                       </tr>
                     <?php } ?>
