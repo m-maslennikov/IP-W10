@@ -24,6 +24,12 @@
               <div class="form-group">
                 <input type="password" id="account_password" name="account_password" class="form-control" placeholder="Password" required="required">
               </div>
+              <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" name="remember_me" id="remember_me">
+                  <label class="custom-control-label" for="remember_me">Remember me</label>
+                </div>
+              </div>
               <div class="form-group g-recaptcha" data-sitekey="6LcZx5cUAAAAAGo0SgYP8CWpaSTlB1s5yattyGxb"></div>
               <button type="submit" class="btn btn-primary btn-block" name="login">Login</button>
             </form>

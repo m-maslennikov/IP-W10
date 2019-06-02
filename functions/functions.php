@@ -931,6 +931,24 @@ function validateUserLogin(){
                     }
                 } else {
                     if(loginUser($account_email, $account_password)){
+                        if(!empty($_POST['remember_me'])){
+                            // Set Auth Cookies if 'Remember Me' checked
+                            // Get Current date, time
+                            $current_time = time();
+                            // Set Cookie expiration for 1 month
+                            $cookie_expiration_time = $current_time + (30 * 24 * 60 * 60);  // for 1 month
+                            //generate random token
+                            $token = generateToken();
+                            //set this random token to cookie
+                            setcookie("member_login", $token, $cookie_expiration_time);
+                            //save this random token to the database
+                            $query = "UPDATE accounts SET account_rme_cookie = '$token' WHERE account_email = '$account_email'";
+                            query($query);
+                        } else {
+                            unset($_COOKIE['member_login']);
+                            $query = "UPDATE accounts SET account_rme_cookie = NULL WHERE account_email = '$account_email'";
+                            query($query);
+                        }
                         redirect("admin");
                     } else {
                         displayErrorAlert("We can not log you in. <br> Possible causes: <br> 1. Incorrect credetials <br> 2. Account is not activated");
@@ -939,7 +957,6 @@ function validateUserLogin(){
             }
         } else {
             displayErrorAlert("Are you a robot?");
-            //$errors[] = "Are you a robot?";
         }
     }
 }
