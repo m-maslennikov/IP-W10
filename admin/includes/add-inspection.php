@@ -47,21 +47,11 @@
                 <div class="form-group row">
                   <div class="col-sm-6 mb-3 mb-sm-0">
                     <label for="inspection_start_date">Inspection start date</label>
-                    <input type="date" name="inspection_start_date" id="inspection_start_date" class="form-control" value="<?php echo date("Y-m-d"); ?>">
+                    <input type="datetime-local" name="inspection_start_date" id="inspection_start_date" class="form-control" value="<?php echo date("Y-m-d\TH:i"); ?>">
                   </div>
-                  <div class="col-sm-6">
-                    <label for="inspection_start_time">Inspection start time</label>
-                    <input type="time" name="inspection_start_time" id="inspection_start_time" class="form-control" value="<?php echo date("H:i"); ?>">
-                  </div>
-                </div>
-                <div class="form-group row">
                   <div class="col-sm-6 mb-3 mb-sm-0">
                     <label for="inspection_end_date">Inspection end date</label>
-                    <input type="date" name="inspection_end_date" id="inspection_end_date" class="form-control" value="<?php echo date("Y-m-d"); ?>">
-                  </div>
-                  <div class="col-sm-6">
-                    <label for="inspection_end_time">Inspection end time</label>
-                    <input type="time" name="inspection_end_time" id="inspection_end_time" class="form-control" value="<?php echo date("H:i"); ?>">
+                    <input type="datetime-local" name="inspection_end_date" id="inspection_end_date" class="form-control" value="<?php echo date("Y-m-d\TH:i", strtotime('1 day')); ?>">
                   </div>
                 </div>
                 <div class="form-group row">
@@ -82,6 +72,7 @@
                   <div class="col-sm-6">
                     <label for="inspection_score">Inspection Score</label>
                     <select name="inspection_score" id="inspection_score" class="form-control">
+                      <option value='NULL'>N/A</option>
                       <option value='1'>1</option>
                       <option value='2'>2</option>
                       <option value='3'>3</option>

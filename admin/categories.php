@@ -1,4 +1,5 @@
-<?php include "includes/_admin-header.php"; ?>
+<?php $current = 'categories';
+include "includes/_admin-header.php"; ?>
 
         <!-- Begin Page Content -->
         <div class="container-fluid">

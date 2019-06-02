@@ -111,7 +111,11 @@ if(!isAdmin() && !isStaff()) {redirect("../");} ?>
       <li class="nav-item <?php if($current == 'inspections') {echo ' active';} ?>">
         <a class="nav-link" href="inspections.php">
           <i class="fas fa-fw fa-wrench"></i>
-          <span>Inspections</span></a>
+          <span>Inspections</span>
+          <span class="badge badge-info ml-1">
+          <?php echo scheduledInspectionsCount(); ?>
+          </span>
+        </a>
       </li>
 
       <!-- Nav Item - Home -->

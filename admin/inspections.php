@@ -11,7 +11,7 @@ switch ($action) {
         include "includes/add-inspection.php";
         break;
     case 'edit':
-        include "includes/todo.php";
+        include "includes/edit-inspection.php";
         break;
     case 'view':
         include "includes/todo.php";

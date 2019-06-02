@@ -111,6 +111,14 @@ function newBookingsCount(){
     return $entity_count;
 }
 
+// Count total number of pending bookings
+function scheduledInspectionsCount(){
+    $query = "SELECT * FROM inspections WHERE inspection_status = 'Scheduled'";
+    $result = query($query);
+    $entity_count = rowCount($result);
+    return $entity_count;
+}
+
 // Function for adding new car categories
 function insertCategory() {
     if (isset($_POST['add_category'])) {
@@ -232,16 +240,26 @@ function addCar() {
 // Function for adding a new inspection
 function addInspection() {
     if (isset($_POST['add_inspection'])) {
+        $now = date("Y-m-d\TH:i");
         $car_id = $_POST['car_id'];
         $inspection_type_id = $_POST['inspection_type_id'];
         $inspection_start_date = $_POST['inspection_start_date'];
-        $inspection_start_time = $_POST['inspection_start_time'];
         $inspection_end_date = $_POST['inspection_end_date'];
-        $inspection_end_time = $_POST['inspection_end_time'];
+
+        if ($inspection_start_date > $now) {
+            $inspection_status = "Scheduled";
+        } else if ($inspection_start_date <= $now) {
+            $inspection_status = "In progress";
+        }
+
+        if ($inspection_end_date < $now) {
+            $inspection_status = "Completed";
+        }
+        
         $account_id = $_POST['account_id'];
         $inspection_score = $_POST['inspection_score'];
-        $query = "INSERT INTO inspections (car_id, inspection_type_id, inspection_start_date, inspection_start_time, inspection_end_date, inspection_end_time, account_id, inspection_score) 
-                VALUES ('{$car_id}','{$inspection_type_id}','{$inspection_start_date}','{$inspection_start_time}','{$inspection_end_date}','{$inspection_end_time}','{$account_id}','{$inspection_score}')";
+        $query = "INSERT INTO inspections (car_id, inspection_status, inspection_type_id, inspection_start_date, inspection_end_date, account_id, inspection_score) 
+                VALUES ('$car_id','$inspection_status','$inspection_type_id','$inspection_start_date','$inspection_end_date',$account_id,$inspection_score)";
         query($query);
         displaySuccessAlert("Inspection added. <a href='inspections.php'>Go to Inspections</a>");
     }
@@ -286,6 +304,39 @@ function updateCar($car_id) {
                 WHERE car_id = {$car_id}";
         query($query);
         redirect("cars.php");
+    }
+} // EOF
+
+// Function for updating inspection details
+function updateInspection($inspection_id) {
+    global $connection;
+    if (isset($_POST['update_inspection'])) {
+        $now = date("Y-m-d\TH:i");
+        $inspection_start_date = $_POST['inspection_start_date'];
+        $inspection_end_date = $_POST['inspection_end_date'];
+        $account_id = $_POST['account_id'];
+        $car_id = $_POST['car_id'];
+        $inspection_score = $_POST['inspection_score'];
+
+        if ($inspection_start_date > $now) {
+            $inspection_status = "Scheduled";
+        } else if ($inspection_start_date <= $now) {
+            $inspection_status = "In progress";
+        }
+        if ($inspection_end_date < $now) {
+            $inspection_status = "Completed";
+        }
+
+        $query = "UPDATE inspections SET 
+                inspection_start_date = '{$inspection_start_date}', 
+                inspection_end_date = '{$inspection_end_date}', 
+                account_id = '{$account_id}', 
+                inspection_score = '{$inspection_score}',
+                inspection_status = '{$inspection_status}'
+                WHERE inspection_id = {$inspection_id}";
+        query($query);
+
+        redirect("inspections.php");
     }
 } // EOF
 

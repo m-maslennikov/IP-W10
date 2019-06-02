@@ -19,12 +19,10 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                   <thead>
                     <tr>
-                      <th><input type="checkbox" name="bulk_option" id="selectAllBoxes"></th>
                       <th>ID</th>
+                      <th>Status</th>
                       <th>Start date</th>
-                      <th>Start time</th>
                       <th>End date</th>
-                      <th>End time</th>
                       <th>Score</th>
                       <th>Email</th>
                       <th>Car</th>
@@ -34,12 +32,10 @@
                   </thead>
                   <tfoot>
                     <tr>
-                      <th></th>
                       <th>ID</th>
+                      <th>Status</th>
                       <th>Start date</th>
-                      <th>Start time</th>
                       <th>End date</th>
-                      <th>End time</th>
                       <th>Score</th>
                       <th>Email</th>
                       <th>Car</th>
@@ -50,10 +46,9 @@
                   <tbody>
                   <?php
                   $query = "SELECT i.inspection_id
+                                  , i.inspection_status
                                   , i.inspection_start_date
-                                  , i.inspection_start_time
                                   , i.inspection_end_date
-                                  , i.inspection_end_time
                                   , i.inspection_score
                                   , a.account_email
                                   , c.car_make
@@ -68,10 +63,9 @@
                   $result = query($query);
                   while($row = fetchArray($result)) {
                       $inspection_id = $row['inspection_id'];
+                      $inspection_status = $row['inspection_status'];
                       $inspection_start_date = $row['inspection_start_date'];
-                      $inspection_start_time = $row['inspection_start_time'];
                       $inspection_end_date = $row['inspection_end_date'];
-                      $inspection_end_time = $row['inspection_end_time'];
                       $inspection_score = $row['inspection_score'];
                       $account_email = $row['account_email'];
                       $car_make = $row['car_make'];
@@ -81,20 +75,15 @@
                       $inspection_type_max_score = $row['inspection_type_max_score'];
                   ?>
                   <tr>
-                    <td><input class="checkboxes" type="checkbox" name="inspectionsCheckboxArray[]" value="<?php echo $inspection_id; ?>" id="selectAllBoxes"></td>
                     <td><?php echo $inspection_id; ?></td>
+                    <td><?php echo $inspection_status; ?></td>
                     <td><?php echo $inspection_start_date; ?></td>
-                    <td><?php echo $inspection_start_time; ?></td>
                     <td><?php echo $inspection_end_date; ?></td>
-                    <td><?php echo $inspection_end_time; ?></td>
                     <td><?php echo $inspection_score; ?></td>
                     <td><?php echo $account_email; ?></td>
                     <td><?php echo "$car_id: $car_make $car_model"; ?></td>
                     <td><?php echo $inspection_type_name; ?></td>
                     <td>
-                      <a href='inspections.php?action=view&inspection_id=<?php echo $inspection_id; ?>' class='btn btn-primary btn-circle btn-sm'><i class='fas fa-eye'></i></a>
-                      <a href='inspections.php?enable=<?php echo $inspection_id; ?>' class='btn btn-success btn-circle btn-sm'><i class='fas fa-check'></i></a>
-                      <a href='inspections.php?resolve=<?php echo $inspection_id; ?>' class='btn btn-warning btn-circle btn-sm'><i class='fas fa-ban'></i></a>
                       <a href='inspections.php?action=edit&inspection_id=<?php echo $inspection_id; ?>' class='btn btn-secondary btn-circle btn-sm'><i class='fas fa-pencil-alt'></i></a>
                     </td>
                   </tr>
