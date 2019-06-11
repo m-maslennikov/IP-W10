@@ -17,6 +17,7 @@
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownPortfolio">
           <a class="dropdown-item" href="profile.php">My Profile</a>
+          <a class="dropdown-item" href="history.php">Booking history</a>
           <?php if(isAdmin() || isStaff()) : ?>
           <a class="dropdown-item" href="admin">Admin/Staff portal</a>
           <?php endif ?>
