@@ -316,7 +316,12 @@ function updateInspection($inspection_id) {
         $inspection_end_date = $_POST['inspection_end_date'];
         $account_id = $_POST['account_id'];
         $car_id = $_POST['car_id'];
-        $inspection_score = $_POST['inspection_score'];
+        if (!empty($_POST['inspection_score'])){
+            $inspection_score = $_POST['inspection_score'];
+        } else {
+            $inspection_score = NULL;
+        }
+        
 
         if ($inspection_start_date > $now) {
             $inspection_status = "Scheduled";
@@ -331,7 +336,7 @@ function updateInspection($inspection_id) {
                 inspection_start_date = '{$inspection_start_date}', 
                 inspection_end_date = '{$inspection_end_date}', 
                 account_id = '{$account_id}', 
-                inspection_score = '{$inspection_score}',
+                inspection_score = {$inspection_score},
                 inspection_status = '{$inspection_status}'
                 WHERE inspection_id = {$inspection_id}";
         query($query);
