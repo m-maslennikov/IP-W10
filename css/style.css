@@ -12,6 +12,18 @@ body {
   background-size: cover;
 }
 
+/*containter to the background of index page*/
+.ctn-background {
+  background-image: url("../images/index.jpg");
+  height: 83vh;
+  min-height: 300px;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-position-y: center;
+}
+
 /* TO DO:
 RENAME THIS CLASS AND UPDATE CONTENT */
 .portfolio-item {

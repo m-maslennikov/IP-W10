@@ -1173,6 +1173,25 @@ function sendMail($emailTo, $emailToName, $subject, $message){
     }
 } // EOF
 
+// Set dates and category in the session from the index page
+function setIndexPageBooking(){
+    if (isset($_POST['index_page_book'])){
+        $_SESSION['datefrom'] = $_POST['startdate'];
+        $_SESSION['dateto'] = $_POST['enddate'];
+        $_SESSION['category'] = $_POST['categories'];
+        redirect("newbooking.php");
+    }   
+}
+
+function setBookingInfo(){
+    if (isset($_POST['index_page_book'])){
+        $_SESSION['datefrom'] = $_POST['startdate'];
+        $_SESSION['dateto'] = $_POST['enddate'];
+        $_SESSION['category'] = $_POST['categories'];
+
+        redirect("newbooking.php?action=select_car");
+    }
+}
 // ------------------------------------------------------------------
 // Content functions END
 // ------------------------------------------------------------------
