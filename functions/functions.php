@@ -316,7 +316,12 @@ function updateInspection($inspection_id) {
         $inspection_end_date = $_POST['inspection_end_date'];
         $account_id = $_POST['account_id'];
         $car_id = $_POST['car_id'];
-        $inspection_score = $_POST['inspection_score'];
+        if (!empty($_POST['inspection_score'])){
+            $inspection_score = $_POST['inspection_score'];
+        } else {
+            $inspection_score = NULL;
+        }
+        
 
         if ($inspection_start_date > $now) {
             $inspection_status = "Scheduled";
@@ -331,7 +336,7 @@ function updateInspection($inspection_id) {
                 inspection_start_date = '{$inspection_start_date}', 
                 inspection_end_date = '{$inspection_end_date}', 
                 account_id = '{$account_id}', 
-                inspection_score = '{$inspection_score}',
+                inspection_score = {$inspection_score},
                 inspection_status = '{$inspection_status}'
                 WHERE inspection_id = {$inspection_id}";
         query($query);
@@ -931,6 +936,24 @@ function validateUserLogin(){
                     }
                 } else {
                     if(loginUser($account_email, $account_password)){
+                        if(!empty($_POST['remember_me'])){
+                            // Set Auth Cookies if 'Remember Me' checked
+                            // Get Current date, time
+                            $current_time = time();
+                            // Set Cookie expiration for 1 month
+                            $cookie_expiration_time = $current_time + (30 * 24 * 60 * 60);  // for 1 month
+                            //generate random token
+                            $token = generateToken();
+                            //set this random token to cookie
+                            setcookie("member_login", $token, $cookie_expiration_time);
+                            //save this random token to the database
+                            $query = "UPDATE accounts SET account_rme_cookie = '$token' WHERE account_email = '$account_email'";
+                            query($query);
+                        } else {
+                            unset($_COOKIE['member_login']);
+                            $query = "UPDATE accounts SET account_rme_cookie = NULL WHERE account_email = '$account_email'";
+                            query($query);
+                        }
                         redirect("admin");
                     } else {
                         displayErrorAlert("We can not log you in. <br> Possible causes: <br> 1. Incorrect credetials <br> 2. Account is not activated");
@@ -939,7 +962,6 @@ function validateUserLogin(){
             }
         } else {
             displayErrorAlert("Are you a robot?");
-            //$errors[] = "Are you a robot?";
         }
     }
 }
@@ -1128,6 +1150,62 @@ function showCar(){
                     <li>$car_doors</li>
                     <li>$car_seats</li> ";
         }
+    }
+} // EOF
+
+// Function for displaying all bookings of a logged in user
+// NEEDS REFACTORING
+function showAllUserBookings(){
+    if(isset($_SESSION['account_email'])) {
+        $account_email = $_SESSION['account_email'];
+        $query = "SELECT a.account_email
+                        , b.booking_id
+                        , b.car_id
+                        , b.booking_status
+                        , b.booking_price
+                        , b.booking_booked_start_date
+                        , b.booking_booked_end_date
+                        , c.car_make
+                        , c.car_model
+                        , c.car_image
+                        , c.car_body_type
+                FROM bookings AS b
+                INNER JOIN accounts AS a ON b.account_id=a.account_id
+                INNER JOIN cars AS c ON b.car_id=c.car_id
+                WHERE a.account_email='$account_email'";
+        $result = query($query);
+        while($row = fetchArray($result)) {
+            $booking_id = $row['booking_id'];
+            $car_id = $row['car_id'];
+            $booking_status = $row['booking_status'];
+            $booking_price = $row['booking_price'];
+            $booking_booked_start_date = $row['booking_booked_start_date'];
+            $booking_booked_end_date = $row['booking_booked_end_date'];
+            $car_make = $row['car_make'];
+            $car_model = $row['car_model'];
+            $car_image = $row['car_image'];
+            $car_body_type = $row['car_body_type'];
+            $account_email = $row['account_email'];
+    
+            // Redner All cars in this category
+            echo "<div class='col-lg-4 col-sm-6 portfolio-item'>";
+                echo "<div class='card h-100'>";
+                    echo "<a href='cars.php?action=view_car&car_id=$car_id'><img class='card-img-top' src='images/cars/$car_image' alt=''></a>";
+                    echo "<div class='card-body'>";
+                        echo "<h4 class='card-title'>";
+                            echo "<a href='cars.php?action=view_car&car_id=$car_id' class='text-dark'>$car_make $car_model</a>";
+                        echo "</h4>";
+                        echo "<h5>$car_body_type</h5>";
+                        echo "<p>From: $booking_booked_start_date to: $booking_booked_end_date</p>";
+                    echo "</div>";
+                    echo "<div class='card-footer'>";
+                        echo "<i class='fas fa-dollar-sign'></i> $booking_price <span class='badge badge-pill badge-primary'>$booking_status</span>";
+                    echo "</div>";
+                echo "</div>";
+            echo "</div>";
+        }
+    } else {
+        redirect("/");
     }
 } // EOF
 
