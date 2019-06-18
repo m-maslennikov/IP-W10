@@ -26,7 +26,10 @@ include("functions/init.php");
     <!-- Google Captcha -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
-    <title>Rent-a-Car - Week 10</title>
+
+    <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+
+    <title>Rent-a-Car - SDI2</title>
 
 </head>
 

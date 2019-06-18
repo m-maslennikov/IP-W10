@@ -1068,10 +1068,11 @@ function showAllCategories(){
         $category_name = $row['category_name'];
         $category_description = $row['category_description'];
         $category_daily_price = $row['category_daily_price'];
+        $category_image = $row['category_image'];
         echo "<div class='row'>";
             echo "<div class='col-md-7'>";
                 echo "<a href='cars.php?action=view_category&category_id=$category_id'>";
-                    echo "<img class='img-fluid rounded mb-3 mb-md-0' src='http://placehold.it/700x300' alt=''>";
+                    echo "<img class='img-fluid rounded mb-3 mb-md-0' src='images/cars/$category_image' alt='category image'>";
                 echo "</a>";
             echo "</div>";
             echo "<div class='col-md-5'>";
@@ -1107,10 +1108,10 @@ function showAllCars(){
             // Redner All cars in this category
             echo "<div class='col-lg-4 col-sm-6 portfolio-item'>";
                 echo "<div class='card h-100'>";
-                    echo "<a href='cars.php?action=view_car&car_id=$car_id'><img class='card-img-top' src='http://placehold.it/700x400' alt=''></a>";
+                    echo "<a href='cars.php?action=view_car&car_id=$car_id'><img class='card-img-top' src='images/cars/$car_image' alt='car image'></a>";
                     echo "<div class='card-body'>";
                         echo "<h4 class='card-title'>";
-                            echo "<a href='cars.php?action=view_car&car_id=$car_id' class='text-dark'>$car_make $car_model</a><span class='badge'><i class='fas fa-tag'></i> $category_id</span>";
+                            echo "<a href='cars.php?action=view_car&car_id=$car_id' class='text-dark'>$car_make $car_model</a>";
                         echo "</h4>";
                         echo "<h5>$car_body_type</h5>";
                     echo "</div>";
@@ -1252,21 +1253,31 @@ function sendMail($emailTo, $emailToName, $subject, $message){
 } // EOF
 
 // Set dates and category in the session from the index page
-function setIndexPageBooking(){
-    if (isset($_POST['index_page_book'])){
-        $_SESSION['datefrom'] = $_POST['startdate'];
-        $_SESSION['dateto'] = $_POST['enddate'];
-        $_SESSION['category'] = $_POST['categories'];
-        redirect("newbooking.php");
+function setBookingStep1(){
+    if (isset($_POST['step1'])){
+        $_SESSION['booking_booked_start_date'] = $_POST['booking_booked_start_date'];
+        $_SESSION['booking_booked_end_date'] = $_POST['booking_booked_end_date'];
+        $_SESSION['category_id'] = $_POST['category_id'];
+        $_SESSION['category_estimated_price_input'] = $_POST['category_estimated_price_input'];
+        redirect("booking_step2.php");
+    }   
+}
+
+function setBookingStep2(){
+    if (isset($_POST['step2'])){
+        //$_SESSION['booking_booked_start_date'] = $_POST['booking_booked_start_date'];
+        //$_SESSION['booking_booked_end_date'] = $_POST['booking_booked_end_date'];
+        //$_SESSION['category_id'] = $_POST['category_id'];
+        $_SESSION['car_id'] = $_POST['car_id'];
+        redirect("booking_step3.php");
     }   
 }
 
 function setBookingInfo(){
-    if (isset($_POST['index_page_book'])){
-        $_SESSION['datefrom'] = $_POST['startdate'];
-        $_SESSION['dateto'] = $_POST['enddate'];
-        $_SESSION['category'] = $_POST['categories'];
-
+    if (isset($_POST['step1'])){
+        $_SESSION['booking_booked_start_date'] = $_POST['booking_booked_start_date'];
+        $_SESSION['booking_booked_end_date'] = $_POST['booking_booked_end_date'];
+        $_SESSION['category_id'] = $_POST['category_id'];
         redirect("newbooking.php?action=select_car");
     }
 }

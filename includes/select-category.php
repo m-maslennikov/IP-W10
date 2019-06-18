@@ -5,10 +5,10 @@
         <button class="btn btn-outline-secondary active btn-sm btn-block steps" id="category_step">Select Category</button>
     </div>
     <div class="col-lg-4 text-center">
-        <button class="btn btn-outline-secondary btn-sm btn-block steps" id="car_step">Select Car</button>
+        <button class="btn btn-outline-secondary btn-sm btn-block steps disabled" id="car_step">Select Car</button>
     </div>
     <div class="col-lg-4 text-center">
-        <button class="btn btn-outline-secondary btn-sm btn-block steps" id="payment_step">Confirm Payment</button>
+        <button class="btn btn-outline-secondary btn-sm btn-block steps disabled" id="payment_step">Confirm Payment</button>
     </div>
     </div>
 </div>
