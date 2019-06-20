@@ -70,13 +70,6 @@ if(!isAdmin() && !isStaff()) {redirect("../");} ?>
           <span>Accounts</span></a>
       </li>
 
-      <!-- Nav Item - Cars -->
-      <li class="nav-item <?php if($current == 'cars') {echo ' active';} ?>">
-        <a class="nav-link" href="cars.php">
-          <i class="fas fa-fw fa-car"></i>
-          <span>Cars</span></a>
-      </li>
-
       <!-- Nav Item - Bookings -->
       <li class="nav-item <?php if($current == 'bookings') {echo ' active';} ?>">
         <a class="nav-link" href="bookings.php">
@@ -86,6 +79,13 @@ if(!isAdmin() && !isStaff()) {redirect("../");} ?>
           <?php echo newBookingCount(); ?>
           </span>
         </a>
+      </li>
+       
+      <!-- Nav Item - Cars -->
+       <li class="nav-item <?php if($current == 'cars') {echo ' active';} ?>">
+        <a class="nav-link" href="cars.php">
+          <i class="fas fa-fw fa-car"></i>
+          <span>Cars</span></a>
       </li>
 
       <!-- Nav Item - Categories -->
