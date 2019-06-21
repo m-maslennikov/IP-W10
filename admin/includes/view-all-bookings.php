@@ -53,7 +53,8 @@
                                     , c.car_model
                               FROM bookings AS b
                               INNER JOIN accounts AS a ON b.account_id=a.account_id
-                              INNER JOIN cars AS c ON b.car_id=c.car_id";
+                              INNER JOIN cars AS c ON b.car_id=c.car_id
+                              WHERE b.booking_status != 'Init'";
                     $result = query($query);
                     while($row = fetchArray($result)) {
                         $booking_id = $row['booking_id'];
