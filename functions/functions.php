@@ -688,6 +688,7 @@ function updateProfile() {
                 WHERE account_id = {$account_id}";
         query($query);
         $_SESSION['account_email'] = $account_email;
+        redirect("profile.php");
     }
 } // EOF
 
@@ -1145,11 +1146,23 @@ function showCar(){
             $car_doors = $row['car_doors'];
             $car_seats = $row['car_seats'];
 
-            echo "  <li>$car_colour</li>
-                    <li>$car_body_type</li>
-                    <li>$car_power</li>
-                    <li>$car_doors</li>
-                    <li>$car_seats</li> ";
+            echo "  
+            <div class=\"col-md-8\">
+                <img class=\"img-fluid\" src=\"images/cars/$car_image\" alt=\"\">
+            </div>
+            <div class=\"col-md-4\">
+                <h3 class=\"my-3\">$car_make $car_model</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
+                <h3 class=\"my-3\">Details</h3>
+                <ul>
+                    <li>Colour: $car_colour</li>
+                    <li>Body type: $car_body_type</li>
+                    <li>Power: $car_power HP</li>
+                    <li>Doors: $car_doors</li>
+                    <li>Seats: $car_seats</li> 
+                </ul>
+                    
+            ";
         }
     }
 } // EOF
@@ -1210,22 +1223,6 @@ function showAllUserBookings(){
     }
 } // EOF
 
-// Function for making a booking of specific car
-function bookCar(){
-    if(isset($_POST['book'])) {
-        $booking_booked_start_date = $_POST['booking_booked_start_date'];
-        $booking_booked_end_date = $_POST['booking_booked_end_date'];
-        $account_id = $_SESSION['account_id'];
-        $account_email = $_SESSION['account_email'];
-        $car_id = $_POST['car_id'];
-        $query = "INSERT INTO bookings (booking_booked_start_date, booking_booked_end_date, account_id, car_id) 
-                      VALUES ('{$booking_booked_start_date}','{$booking_booked_end_date}','{$account_id}','{$car_id}')";
-        query($query);
-        sendMail($account_email,$account_email,"Rent-a-Car Booking Confirmation","Your booking has been received. <br> Once it approved we will send you an email with payment methods.");
-        displaySuccessAlert("Yor request has been sent. Please check your email for further actions");
-    }
-} // EOF
-
 // Function for sending mail via PHPMailer class
 function sendMail($emailTo, $emailToName, $subject, $message){
     $mail = new PHPMailer;
@@ -1265,13 +1262,33 @@ function setBookingStep1(){
 
 function setBookingStep2(){
     if (isset($_POST['step2'])){
-        //$_SESSION['booking_booked_start_date'] = $_POST['booking_booked_start_date'];
-        //$_SESSION['booking_booked_end_date'] = $_POST['booking_booked_end_date'];
-        //$_SESSION['category_id'] = $_POST['category_id'];
         $_SESSION['car_id'] = $_POST['car_id'];
         redirect("booking_step3.php");
     }   
 }
+
+// Function for making a booking of specific car
+function setBookingStep3(){
+    if(isset($_POST['step3'])) {
+        $booking_booked_start_date = $_SESSION['booking_booked_start_date'];
+        $booking_booked_end_date = $_SESSION['booking_booked_end_date'];
+        $account_id = $_SESSION['account_id'];
+        $account_email = $_SESSION['account_email'];
+        $car_id = $_SESSION['car_id'];
+        $promocode_id=$_SESSION['promocode_used'];
+        if(isset($_SESSION['new_price'])){
+            $booking_price = $_SESSION['new_price'];
+        } else if(isset($_SESSION['category_estimated_price_input'])){
+            $booking_price = $_SESSION['category_estimated_price_input'];
+        }
+
+        $query = "INSERT INTO bookings (booking_booked_start_date, booking_booked_end_date, account_id, car_id, promocode_id, booking_price) 
+                      VALUES ('$booking_booked_start_date','$booking_booked_end_date',$account_id,$car_id,$promocode_id,$booking_price)";
+        query($query);
+        sendMail($account_email,$account_email,"Rent-a-Car Booking Confirmation","Your booking has been received. <br> Once we check your payment you will receive confirmation email.");
+        displaySuccessAlert("Yor request has been sent. Please check your email for further actions");
+    }
+} // EOF
 
 function setBookingInfo(){
     if (isset($_POST['step1'])){
