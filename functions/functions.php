@@ -605,7 +605,7 @@ function acceptBooking() {
         $query = "UPDATE bookings SET booking_status = 'Accepted' WHERE booking_id = $booking_id";
         query($query);
         $subject = "Payment information";
-        $message = "Your booking is confirmed. You may pay by cash or credit card in our office.";
+        $message = "Your paiment is checked and booking is confirmed.";
         sendMail($account_email, $account_email, $subject, $message);
         redirect("bookings.php");
     }
@@ -626,7 +626,7 @@ function rejectBooking() {
         $query = "UPDATE bookings SET booking_status = 'Rejected', booking_comment = '$booking_comment' WHERE booking_id = $booking_id";
         query($query);
         $subject = "Booking is rejected";
-        $message = "Your booking is rejected. The reason provided by staff: " . $_POST['booking_comment'] . "";
+        $message = "Your booking is rejected. Reason: " . $_POST['booking_comment'] . "";
         sendMail($account_email, $account_email, $subject, $message);
         redirect("bookings.php");
     }
