@@ -80,7 +80,18 @@ include("functions/init.php");
               <div class="form-group">
                 <select class="form-control" name="car_id" id="car_id">
                 <?php 
-                $query = "SELECT car_id, car_make, car_model FROM cars WHERE category_id=$category_id AND car_status='available'";
+                $start_date=$_SESSION['booking_booked_start_date'];
+                $end_date=$_SESSION['booking_booked_end_date'];
+
+                $query = "SELECT * FROM cars WHERE car_id NOT IN (
+                            SELECT DISTINCT c.car_id
+                            FROM cars AS c
+                            INNER JOIN bookings AS b ON c.car_id=b.car_id
+                            WHERE '$start_date' < b.booking_booked_end_date
+                            AND '$end_date' > b.booking_booked_start_date
+                          ) 
+                          AND (category_id=$category_id AND car_status='available')";
+
                 $result = query($query);
                 while($row = fetchArray($result)) {
                   $car_id = $row['car_id'];
