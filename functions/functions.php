@@ -474,7 +474,7 @@ function addAccount() {
         $query = "INSERT INTO accounts (account_password, account_email, account_type, account_first_name, account_last_name, account_status) 
                 VALUES ('{$account_password}','{$account_email}','{$account_type}','{$account_first_name}','{$account_last_name}','{$account_status}')";
         query($query);
-        displaySessionMessage("User created. <a href='accounts.php'>Go to accounts</a>");
+        displaySuccessAlert("User created. <a href='accounts.php'>Go to accounts</a>");
         //redirect("accounts.php");
     }
 } // EOF
