@@ -26,6 +26,8 @@ if(!isAdmin() && !isStaff()) {redirect("../");} ?>
 
   <!-- Custom styles for this page -->
   <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+  <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+
 
 </head>
 

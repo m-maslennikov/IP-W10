@@ -632,7 +632,9 @@ function rejectBooking() {
     }
 } // EOF
 
-function updateBooking($booking_id){}
+function updateBooking($booking_id){
+    
+}
 
 //function for handling bulk booking actions
 function bulkBookingAction(){
