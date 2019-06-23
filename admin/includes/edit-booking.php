@@ -33,10 +33,11 @@ if(isset($_GET['booking_id'])) {
     $car_id = $row['car_id'];
     $car_make = $row['car_make'];
     $car_model = $row['car_model'];
+    $promocode_text = $row['promocode_text'];
   }
 }
 //TODO:
-//updateBooking($booking_id);
+updateBooking($booking_id);
 ?>
         <!-- Begin Page Content -->
         <div class="container-fluid">
@@ -53,43 +54,31 @@ if(isset($_GET['booking_id'])) {
             <div class="card-body">
               <form class="user" action="" method="post" enctype=multipart/form-data>
                 <div class="form-group row">
-                  <div class="col-sm-6 mb-3 mb-sm-0">
-                    <label for="booking_booked_start_date">booking_booked_start_date</label>
+                  <div class="col-sm-4 mb-3 mb-sm-0">
+                    <label for="booking_booked_start_date">Booking Start Date</label>
                     <input name="booking_booked_start_date" id="booking_booked_start_date" class="form-control" value="<?php echo $booking_booked_start_date; ?>">
                   </div>
-                  <div class="col-sm-6">
-                    <label for="booking_booked_start_time">booking_booked_start_time</label>
-
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <div class="col-sm-6 mb-3 mb-sm-0">
-                    <label for="booking_booked_end_date">booking_booked_end_date</label>
+                  <div class="col-sm-4">
+                    <label for="booking_booked_end_date">Booking End Date</label>
                     <input name="booking_booked_end_date" id="booking_booked_end_date" class="form-control" value="<?php echo $booking_booked_end_date; ?>">
                   </div>
-                  <div class="col-sm-6">
-                    <label for="booking_booked_end_time">booking_booked_end_time</label>
-
+                  <div class="col-sm-4 mb-3 mb-sm-0">
+                    <label for="booking_price">$ Paid</label>
+                    <input disabled name="booking_price" id="booking_price" class="form-control" value="<?php echo $booking_price; ?>">
                   </div>
                 </div>
                 <div class="form-group row">
-                  <div class="col-sm-6 mb-3 mb-sm-0">
-                    <label for="booking_real_start_date">booking_real_start_date</label>
+                  <div class="col-sm-4 mb-3 mb-sm-0">
+                    <label for="booking_real_start_date">Pickup Date</label>
                     <input name="booking_real_start_date" id="booking_real_start_date" class="form-control" value="<?php echo $booking_real_start_date; ?>">
                   </div>
-                  <div class="col-sm-6">
-                    <label for="booking_real_start_time">booking_real_start_time</label>
-
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <div class="col-sm-6 mb-3 mb-sm-0">
-                    <label for="booking_real_end_date">booking_real_end_date</label>
+                  <div class="col-sm-4">
+                    <label for="booking_real_end_date">Dropoff Date</label>
                     <input name="booking_real_end_date" id="booking_real_end_date" class="form-control" value="<?php echo $booking_real_end_date; ?>">
                   </div>
-                  <div class="col-sm-6">
-                    <label for="booking_real_end_time">booking_real_end_time</label>
-
+                  <div class="col-sm-4 mb-3 mb-sm-0">
+                    <label for="promocode_text">Promocode Used</label>
+                    <input disabled name="promocode_text" id="promocode_text" class="form-control" value="<?php echo $promocode_text; ?>">
                   </div>
                 </div>
                 <hr>

@@ -633,7 +633,21 @@ function rejectBooking() {
 } // EOF
 
 function updateBooking($booking_id){
-    
+    if(isset($_POST['update_booking'])) {
+        $booking_booked_start_date = $_POST['booking_booked_start_date'];
+        $booking_booked_end_date = $_POST['booking_booked_end_date'];
+        $booking_real_start_date = $_POST['booking_real_start_date'];
+        $booking_real_end_date = $_POST['booking_real_end_date'];
+
+        $query = "UPDATE bookings SET 
+                booking_booked_start_date = '{$booking_booked_start_date}',
+                booking_booked_end_date = '{$booking_booked_end_date}',
+                booking_real_start_date = '{$booking_real_start_date}',
+                booking_real_end_date = '{$booking_real_end_date}'
+                WHERE booking_id = {$booking_id}";
+        query($query);
+        //redirect("profile.php");
+    }
 }
 
 //function for handling bulk booking actions
