@@ -17,7 +17,8 @@ if(isset($_GET['booking_id'])) {
             FROM bookings AS b
             INNER JOIN accounts AS a ON b.account_id=a.account_id
             INNER JOIN cars AS c ON b.car_id=c.car_id
-            INNER JOIN promocodes AS p ON b.promocode_id=p.promocode_id";
+            INNER JOIN promocodes AS p ON b.promocode_id=p.promocode_id
+            WHERE booking_id = $booking_id";
   $result = query($query);
   while($row = fetchArray($result)) {
     $account_email = $row['account_email'];
