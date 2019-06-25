@@ -1291,7 +1291,11 @@ function setBookingStep3(){
         $account_id = $_SESSION['account_id'];
         $account_email = $_SESSION['account_email'];
         $car_id = $_SESSION['car_id'];
-        $promocode_id=$_SESSION['promocode_used'];
+        if (isset($_SESSION['promocode_used'])){
+            $promocode_id=$_SESSION['promocode_used'];
+          }  else {
+              $promocode_id=4;
+          };
         if(isset($_SESSION['new_price'])){
             $booking_price = $_SESSION['new_price'];
         } else if(isset($_SESSION['category_estimated_price_input'])){
