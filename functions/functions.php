@@ -605,7 +605,7 @@ function acceptBooking() {
         $query = "UPDATE bookings SET booking_status = 'Accepted' WHERE booking_id = $booking_id";
         query($query);
         $subject = "Payment information";
-        $message = "Your paiment is checked and booking is confirmed.";
+        $message = "Your payment is checked and booking is confirmed.";
         sendMail($account_email, $account_email, $subject, $message);
         redirect("bookings.php");
     }
